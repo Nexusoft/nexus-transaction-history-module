@@ -4,6 +4,8 @@ import {
   updateInput,
 } from 'actions/actionCreators';
 
+import Overview from './Overview';
+
 const {
   libraries: {
     React,
@@ -25,10 +27,11 @@ const DemoTextField = styled(TextField)({
 });
 
 @connect(
-  state => ({
+  (state) => ({
     coreInfo: state.coreInfo,
     showingConnections: state.settings.showingConnections,
     inputValue: state.ui.inputValue,
+    isLoggedIn: true,
   }),
   { showConnections, hideConnections, updateInput }
 )
@@ -49,7 +52,7 @@ class Main extends React.Component {
     }
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     this.props.updateInput(e.target.value);
   };
 
@@ -68,13 +71,15 @@ class Main extends React.Component {
   };
 
   render() {
-    const { coreInfo, showingConnections, inputValue } = this.props;
+    const { coreInfo, showingConnections, inputValue, isLoggedIn } = this.props;
     return (
       <Panel
         title="React Module Example"
-        icon={{ url: 'react.svg', id: 'icon' }}
+        icon={{ url: 'History.svg', id: 'icon' }}
       >
         <GlobalStyles />
+
+        {isLoggedIn ? <Overview /> : <div></div>}
         <div>
           This showcases how a Nexus Wallet Modules can interact with the base
           wallet.

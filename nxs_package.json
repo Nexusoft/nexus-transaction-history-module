@@ -6,8 +6,8 @@
   "description": "Loads and Saves history data for your Nexus Account",
   "type": "app",
   "entry": "dist/index.html",
-  "icon": "dist/react.svg",
-  "files": ["dist/index.html", "dist/react.svg", "dist/js/app.js"],
+  "icon": "dist/History.svg",
+  "files": ["dist/index.html", "dist/History.svg", "dist/js/app.js"],
   "author": {
     "name": "Kendal Cormany",
     "email": "kendal.cormany@nexus.io"
