@@ -1,4 +1,5 @@
 import Table from './Table';
+import { CSVLink } from 'react-csv';
 
 const {
   libraries: {
@@ -18,22 +19,42 @@ const {
 
 const columns = [
   {
-    id: 'reference',
-    Header: 'Reference',
-    accessor: 'reference',
+    id: 'time',
+    Header: 'Date Time',
+    accessor: 'time',
+  },
+  {
+    id: 'amount',
+    Header: 'Amount',
+    accessor: 'amount',
   },
 ];
 
+const Header = styled.div({});
+
+const Footer = styled.div({});
+
 class Overview extends React.Component {
-  asdfgh() {
-    return <Table defaultSortingColumnIndex={0} data={[]} columns={columns} />;
-  }
   render() {
-    console.log(this.asdfgh());
+    const data = [
+      ['time', 'Amount'],
+      ['July', '100'],
+      ['March', '20'],
+    ];
     return (
       <div>
-        Overview
+        <Header>
+          <h1>Filters</h1>
+        </Header>
+
         <Table defaultSortingColumnIndex={0} data={[]} columns={columns} />
+        <Footer>
+          <Button>
+            <CSVLink data={data} filename={'Nexus_Transaction_History.csv'}>
+              Save CSV
+            </CSVLink>
+          </Button>
+        </Footer>
       </div>
     );
   }

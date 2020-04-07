@@ -6,6 +6,7 @@ const {
 const Table = ({ data, columns, defaultSortingColumnIndex, ...rest }) => (
   <ReactTable
     noDataText={'No Rows Found'}
+    minRows={5}
     PropTypes={PropTypes}
     data={data}
     pageText={'Page'}
