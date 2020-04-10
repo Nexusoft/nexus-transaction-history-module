@@ -41,3 +41,12 @@ export const GetAccountTransactions = (accounts) => async (dispatch) => {
     console.error(error);
   }
 };
+
+export const UpdateUserInfo = () => async (dispatch) => {
+  try {
+    const result = await apiCall('users/get/status');
+    dispatch({ type: TYPE.UPDATE_USER_INFO, payload: result });
+  } catch (error) {
+    console.error(error);
+  }
+};

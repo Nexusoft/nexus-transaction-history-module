@@ -57,6 +57,7 @@ const mapStateToProps = (state) => {
     accounts: state.user.accounts,
     state: state,
     transactions: state.user.transactions,
+    txTotal: state.user.info.transactions,
   };
 };
 
@@ -72,6 +73,10 @@ class Overview extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.accounts && prevProps.accounts != this.props.accounts) {
       console.log(this.props);
+      this.props.GetAccountTransactions(this.props.accounts);
+    }
+    if (this.props.txTotal && this.props.txTotal != prevProps.txTotal) {
+      this.props.GetUserAccounts();
       this.props.GetAccountTransactions(this.props.accounts);
     }
   }

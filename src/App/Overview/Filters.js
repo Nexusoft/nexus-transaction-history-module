@@ -98,45 +98,13 @@ const Filters = ({
         onChange={(evt) => null}
       />
     </FormField>
-
     <FormField label={__('Time span')}>
       <Select value={timeSpan} onChange={null} options={timeFrames} />
     </FormField>
-
     <FormField label={__('Status')}>
       <Select value={status} onChange={null} options={opOptions} />
     </FormField>
-
     {children}
-    {optionsOpen && (
-      <MoreOptions>
-        <FormField label={__('Description')}>
-          <TextField
-            disabled={true}
-            type="search"
-            placeholder="Description Search (Coming soon <--> )"
-          />
-        </FormField>
-
-        <FormField label={__('Show Only PastDue ')}>
-          <Switch disabled={true} />
-        </FormField>
-
-        <FormField label={__('Payable')}>
-          <TextField
-            disabled={true}
-            type="search"
-            placeholder="Search Payable"
-          />
-        </FormField>
-        <FormField label={__('Receipiant')}>
-          <TextField
-            disabled={true}
-            type="search"
-            placeholder="Search Receipiant"
-          />
-        </FormField>
-      </MoreOptions>
     )}
   </FiltersWrapper>
 );

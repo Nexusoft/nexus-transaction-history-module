@@ -5,6 +5,7 @@ import {
   updateCoreInfo,
   updateTheme,
 } from './actions/actionCreators';
+import { UpdateUserInfo } from 'Shared/Libraries/user';
 
 const store = configureStore();
 
@@ -17,15 +18,16 @@ const {
   utilities: { onceInitialize, onCoreInfoUpdated, onThemeUpdated },
 } = NEXUS;
 
-onceInitialize(data => {
+onceInitialize((data) => {
   store.dispatch(initialize(data));
 });
 
-onCoreInfoUpdated(coreInfo => {
+onCoreInfoUpdated((coreInfo) => {
   store.dispatch(updateCoreInfo(coreInfo));
+  store.dispatch(UpdateUserInfo());
 });
 
-onThemeUpdated(theme => {
+onThemeUpdated((theme) => {
   store.dispatch(updateTheme(theme));
 });
 
