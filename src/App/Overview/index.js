@@ -53,24 +53,26 @@ const Header = styled.div({});
 const Footer = styled.div({});
 
 const mapStateToProps = (state) => {
+  const userInfo = state.user.info;
+
   return {
     accounts: state.user.accounts,
     state: state,
+    userInfo: userInfo,
     transactions: state.user.transactions,
-    txTotal: state.user.info.transactions,
+    txTotal: userInfo && state.user.info.transactions,
   };
 };
 
 const mapDispatchToProps = { GetUserAccounts, GetAccountTransactions };
 class Overview extends React.Component {
-  componentDidMount() {
-    console.log('Mounting');
-    //this.props.GetUserAccounts();
-    //setTimeout(console.log(this.props), 5000);
-    //setTimeout(this.props.GetAccountTransactions(this.props.accounts), 1000);
-  }
+  componentDidMount() {}
 
   componentDidUpdate(prevProps) {
+    if (!this.props.userInfo || !prevProps.userInfo) {
+      //Not Logged in
+      return;
+    }
     if (this.props.accounts && prevProps.accounts != this.props.accounts) {
       console.log(this.props);
       this.props.GetAccountTransactions(this.props.accounts);
@@ -88,7 +90,10 @@ class Overview extends React.Component {
       ['March', '20'],
     ];
 
-    const { transactions } = this.props;
+    const { userInfo, transactions } = this.props;
+    if (!userInfo) {
+      return <div>Please Sign in!</div>;
+    }
     return (
       <div>
         <Header>

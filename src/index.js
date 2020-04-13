@@ -15,7 +15,12 @@ const {
     ReactDOM,
     ReactRedux: { Provider },
   },
-  utilities: { onceInitialize, onCoreInfoUpdated, onThemeUpdated },
+  utilities: {
+    onceInitialize,
+    onCoreInfoUpdated,
+    onUserStatusUpdated,
+    onThemeUpdated,
+  },
 } = NEXUS;
 
 onceInitialize((data) => {
@@ -24,11 +29,17 @@ onceInitialize((data) => {
 
 onCoreInfoUpdated((coreInfo) => {
   store.dispatch(updateCoreInfo(coreInfo));
-  store.dispatch(UpdateUserInfo());
+  //store.dispatch(UpdateUserInfo());
 });
 
 onThemeUpdated((theme) => {
   store.dispatch(updateTheme(theme));
+});
+
+onUserStatusUpdated((userStatus) => {
+  console.error(userStatus);
+  //if null == not logged in
+  store.dispatch(UpdateUserInfo(userStatus));
 });
 
 ReactDOM.render(
