@@ -8,10 +8,6 @@ export default (state = initialState, action) => {
       const { inputValue } = action.payload.moduleState || {};
       return inputValue !== undefined ? inputValue : state;
     }
-
-    case TYPE.UPDATE_INPUT:
-      return action.payload;
-
     default:
       return state;
   }

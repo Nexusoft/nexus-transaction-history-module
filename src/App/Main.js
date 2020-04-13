@@ -1,9 +1,3 @@
-import {
-  showConnections,
-  hideConnections,
-  updateInput,
-} from 'actions/actionCreators';
-
 import { GetUserAccounts } from 'Shared/Libraries/user';
 
 import Overview from './Overview';
@@ -22,7 +16,7 @@ const {
   (state) => ({
     isLoggedIn: true,
   }),
-  { showConnections, hideConnections, updateInput, GetUserAccounts }
+  { GetUserAccounts }
 )
 class Main extends React.Component {
   componentDidMount() {
@@ -32,7 +26,7 @@ class Main extends React.Component {
   render() {
     const { isLoggedIn } = this.props;
     return (
-      <Panel title="React Module Example" icon={History}>
+      <Panel title="History Module" icon={History}>
         <GlobalStyles />
         {isLoggedIn ? <Overview /> : <div></div>}
       </Panel>

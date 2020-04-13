@@ -9,12 +9,6 @@ export default (state = initialState, action) => {
       return showingConnections !== undefined ? showingConnections : state;
     }
 
-    case TYPE.SHOW_CONNECTIONS:
-      return true;
-
-    case TYPE.HIDE_CONNECTIONS:
-      return false;
-
     default:
       return state;
   }

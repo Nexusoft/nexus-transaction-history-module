@@ -4,6 +4,7 @@ import coreInfo from './coreInfo';
 import settings from './settings';
 import ui from './ui';
 import user from './user';
+import history from './history';
 
 const {
   libraries: {
@@ -19,5 +20,6 @@ export default function createReducer() {
     settings,
     ui,
     user,
+    history,
   });
 }

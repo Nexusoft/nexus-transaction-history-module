@@ -8,6 +8,11 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case TYPE.INITIALIZE:
+      return {
+        ...state,
+        info: action.payload.userStatus,
+      };
     case TYPE.SET_USER_ACCOUNTS:
       return {
         ...state,

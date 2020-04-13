@@ -21,7 +21,7 @@ export const getTransactionDataPacket = (txID, timestamp, fiat) => async (
         },
       },
     };
-    dispatch({ type: TYPE.ADD_TRANSACTION_DATAPACKED, payload: dataPacket });
+    dispatch({ type: TYPE.ADD_TRANSACTION_DATAPACKET, payload: dataPacket });
   } catch (error) {
     console.error(error);
   }
