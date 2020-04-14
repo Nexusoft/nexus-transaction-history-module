@@ -30,7 +30,10 @@ export const GetAccountTransactions = (accounts) => async (dispatch) => {
           });
           console.log(result);
           result.forEach((element) => {
-            transactions = transactions.concat(element.contracts);
+            const temp = element.contracts.map((e) => {
+              return { ...e, txid: element.txid };
+            });
+            transactions = transactions.concat(temp);
           });
         }
       });

@@ -3,45 +3,107 @@ const {
   utilities: { apiCall },
 } = NEXUS;
 
-export const getTransactionDataPacket = (txID, timestamp, fiat) => async (
-  dispatch
-) => {
+export const getTransactionDataPacket = (
+  transactions,
+  timestamp,
+  fiat
+) => async (dispatch, getState) => {
+  console.log('gettransctionsDataPacekets');
   try {
-    const txInfo = await getTransactionMoreInfo(txID);
-    const historyInfo = await getHistoricInfo(txInfo.timestamp);
-    const waitTwoSeconds = await setTimeout(() => {
-      return true;
-    }, 2000);
-    const dataPacket = {
-      txID: {
+    console.log('aadsd');
+    asyncForEach(transactions, dispatch, getState, async (tx, {}, {}) => {
+      console.log(tx);
+      const txID = tx.txid;
+      console.log('gettransctionDataPaceket');
+      const past = getState().history.transactions[txID];
+      if (past) {
+        return;
+      }
+      const txInfo = await getTransactionMoreInfo(txID);
+      console.log(txInfo);
+      console.log(dispatch);
+      console.log(getState);
+      const historyInfo = await getHistoricInfo(
+        txInfo.timestamp,
+        fiat,
+        dispatch,
+        getState
+      );
+      console.log(historyInfo);
+      const waitTwoSeconds = await delay(2000);
+      console.log(waitTwoSeconds);
+      let dataPacket = {};
+      dataPacket[txID] = {
         timestamp: txInfo.timestamp,
         fiat: {
           unitPrice: historyInfo.unitPrice,
-          totalValue: historyInfo.unitPrice * txInfo.ammount,
+          totalValue: historyInfo.unitPrice * tx.amount,
         },
-      },
-    };
-    dispatch({ type: TYPE.ADD_TRANSACTION_DATAPACKET, payload: dataPacket });
+      };
+
+      console.error(dataPacket);
+      dispatch({
+        type: TYPE.ADD_TRANSACTION_DATAPACKET,
+        payload: dataPacket,
+      });
+    });
   } catch (error) {
     console.error(error);
   }
 };
 
-const getTransactionMoreInfo = (txID) => async () => {
+async function asyncForEach(array, dispatch, getState, callback) {
+  console.log(callback);
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array, dispatch, getState);
+  }
+}
+
+async function getTransactionMoreInfo(txID) {
   try {
-    const result = await apiCall('gettx');
+    const params = {
+      format: 'JSON',
+      hash: txID,
+    };
+    const result = await apiCall('ledger/get/transaction', params);
     return result;
   } catch (error) {
     console.error(error);
   }
-};
+}
 
-const getHistoricInfo = (timestamp, fiat) => async () => {
+async function getHistoricInfo(timestamp, fiat, dispatch, getState) {
   try {
     //check store for previous price
-    const result = await getURL('url');
-    return result;
+    //const result = await getURL('url');
+    console.log(fiat);
+    console.log(timestamp);
+    console.log(getState);
+
+    let dataPacket = {};
+    dataPacket[timestamp] = {};
+    dataPacket[timestamp][fiat] = {
+      unitPrice: 2,
+    };
+    const prev =
+      getState().history.timestamps && getState().history.timestamps[timestamp];
+    if (prev) {
+      return prev;
+    }
+    dispatch({
+      type: TYPE.ADD_TIMESTAMP_DATAPACKET,
+      payload: dataPacket,
+    });
+    return dataPacket;
   } catch (error) {
     console.error(error);
   }
-};
+}
+
+function delay(t, val) {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      resolve(val);
+    }, t);
+  });
+}

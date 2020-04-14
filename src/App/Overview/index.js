@@ -3,6 +3,7 @@ import { CSVLink } from 'react-csv';
 
 import Filters from './Filters';
 import { GetUserAccounts, GetAccountTransactions } from 'Shared/Libraries/user';
+import { getTransactionDataPacket } from 'Shared/Libraries/transactions';
 
 const {
   libraries: {
@@ -64,7 +65,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = { GetUserAccounts, GetAccountTransactions };
+const mapDispatchToProps = {
+  GetUserAccounts,
+  GetAccountTransactions,
+  getTransactionDataPacket,
+};
 class Overview extends React.Component {
   componentDidMount() {}
 
@@ -77,10 +82,25 @@ class Overview extends React.Component {
       console.log(this.props);
       this.props.GetAccountTransactions(this.props.accounts);
     }
+
+    if (
+      this.props.transactions &&
+      prevProps.transactions != this.props.transactions
+    ) {
+      this.getTransactionHistory();
+    }
     if (this.props.txTotal && this.props.txTotal != prevProps.txTotal) {
       this.props.GetUserAccounts();
       this.props.GetAccountTransactions(this.props.accounts);
     }
+  }
+
+  getTransactionHistory() {
+    this.props.getTransactionDataPacket(
+      this.props.transactions,
+      '000000',
+      'usd'
+    );
   }
 
   render() {

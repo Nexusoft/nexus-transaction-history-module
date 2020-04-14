@@ -4,16 +4,37 @@ const {
   utilities: { updateStorage },
 } = NEXUS;
 
-const initialState = null;
+const initialState = {
+  transactions: {},
+  timestamps: {},
+};
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case TYPE.INITIALIZE:
-      return action.payload.storageData;
+      const storage = action.payload.storageData;
+      if (JSON.stringify(storage) === '{}') {
+        return initialState;
+      }
+      return storage;
     case TYPE.ADD_TRANSACTION_DATAPACKET:
-      const newData = [...state, action.payload];
-      updateStorage(newData);
-      return newData;
+      console.log(state);
+      const newTransactions = {
+        ...state,
+        transactions: { ...state.transactions, ...action.payload },
+      };
+      console.log(newTransactions);
+      updateStorage(newTransactions);
+      return newTransactions;
+    case TYPE.ADD_TIMESTAMP_DATAPACKET:
+      console.log(state);
+
+      const newTimestamps = {
+        ...state,
+        timestamps: { ...state.timestamps, ...action.payload },
+      };
+      updateStorage(newTimestamps);
+      return newTimestamps;
     default:
       return state;
   }
