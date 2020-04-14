@@ -30,14 +30,16 @@ export const getTransactionDataPacket = (
         getState
       );
       console.log(historyInfo);
+      console.log(historyInfo[txInfo.timestamp]);
+      console.log(historyInfo[txInfo.timestamp][fiat]);
       const waitTwoSeconds = await delay(2000);
       console.log(waitTwoSeconds);
       let dataPacket = {};
       dataPacket[txID] = {
         timestamp: txInfo.timestamp,
         fiat: {
-          unitPrice: historyInfo.unitPrice,
-          totalValue: historyInfo.unitPrice * tx.amount,
+          unitPrice: historyInfo[txInfo.timestamp][fiat].unitPrice,
+          totalValue: historyInfo[txInfo.timestamp][fiat].unitPrice * tx.amount,
         },
       };
 
@@ -88,7 +90,8 @@ async function getHistoricInfo(timestamp, fiat, dispatch, getState) {
     const prev =
       getState().history.timestamps && getState().history.timestamps[timestamp];
     if (prev) {
-      return prev;
+      dataPacket[timestamp] = prev;
+      return dataPacket;
     }
     dispatch({
       type: TYPE.ADD_TIMESTAMP_DATAPACKET,

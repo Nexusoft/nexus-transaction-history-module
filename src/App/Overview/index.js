@@ -38,14 +38,19 @@ const columns = [
     accessor: 'to',
   },
   {
-    id: 'time',
+    id: 'timestamp',
     Header: 'Date Time',
-    accessor: 'time',
+    accessor: 'timestamp',
   },
   {
     id: 'amount',
-    Header: 'Amount',
+    Header: 'NXS Amount',
     accessor: 'amount',
+  },
+  {
+    id: 'fiatAmount',
+    Header: 'Fiat Amount',
+    accessor: 'fiatAmount',
   },
 ];
 
@@ -60,6 +65,7 @@ const mapStateToProps = (state) => {
     accounts: state.user.accounts,
     state: state,
     userInfo: userInfo,
+    history: state.history,
     transactions: state.user.transactions,
     txTotal: userInfo && state.user.info.transactions,
   };
@@ -103,13 +109,23 @@ class Overview extends React.Component {
     );
   }
 
-  render() {
-    const data = [
-      ['time', 'Amount'],
-      ['July', '100'],
-      ['March', '20'],
-    ];
+  transformTransactionData() {
+    const { transactions } = this.props;
+    if (!transactions) return [];
+    return transactions.map((e) =>
+      this.props.history.transactions[e.txid]
+        ? {
+            ...e,
+            timestamp: this.props.history.transactions[e.txid].timestamp,
+            fiatAmount: this.props.history.transactions[e.txid].fiat.totalValue,
+          }
+        : {}
+    );
+  }
 
+  render() {
+    const data = this.transformTransactionData();
+    console.log(data);
     const { userInfo, transactions } = this.props;
     if (!userInfo) {
       return <div>Please Sign in!</div>;
@@ -121,11 +137,7 @@ class Overview extends React.Component {
           <Filters />
         </Header>
 
-        <Table
-          defaultSortingColumnIndex={0}
-          data={transactions || []}
-          columns={columns}
-        />
+        <Table defaultSortingColumnIndex={0} data={data} columns={columns} />
         <Footer>
           <Button>
             <CSVLink data={data} filename={'Nexus_Transaction_History.csv'}>
