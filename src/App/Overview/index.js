@@ -52,6 +52,11 @@ const columns = [
     Header: 'Fiat Amount',
     accessor: 'fiatAmount',
   },
+  {
+    id: 'txid',
+    Header: 'TX ID',
+    accessor: 'txid',
+  },
 ];
 
 const Header = styled.div({});
@@ -77,7 +82,10 @@ const mapDispatchToProps = {
   getTransactionDataPacket,
 };
 class Overview extends React.Component {
-  componentDidMount() {}
+  componentDidMount() {
+    const { childRef } = this.props;
+    childRef(this);
+  }
 
   componentDidUpdate(prevProps) {
     if (!this.props.userInfo || !prevProps.userInfo) {
@@ -119,7 +127,7 @@ class Overview extends React.Component {
             timestamp: this.props.history.transactions[e.txid].timestamp,
             fiatAmount: this.props.history.transactions[e.txid].fiat.totalValue,
           }
-        : {}
+        : { OP: 'Loading' }
     );
   }
 
@@ -133,17 +141,23 @@ class Overview extends React.Component {
     return (
       <div>
         <Header>
-          <h1>Filters</h1>
+          <h3>Filters</h3>
           <Filters />
         </Header>
 
-        <Table defaultSortingColumnIndex={0} data={data} columns={columns} />
+        <Table
+          defaultSortingColumnIndex={0}
+          data={data}
+          columns={columns}
+          defaultSortingColumnIndex={3}
+          defaultPageSize={10}
+        />
         <Footer>
-          <Button>
-            <CSVLink data={data} filename={'Nexus_Transaction_History.csv'}>
-              Save CSV
-            </CSVLink>
-          </Button>
+          <CSVLink
+            data={data}
+            ref={'csvLink'}
+            filename={'Nexus_Transaction_History.csv'}
+          ></CSVLink>
         </Footer>
       </div>
     );

@@ -4,6 +4,7 @@ import { SetBusyGatheringInfo } from 'Shared/Libraries/ui';
 import Overview from './Overview';
 import History from 'Shared/Images/History.svg';
 import Spin from 'Shared/Images/recovery.svg';
+import Download from 'Shared/Images/download.svg';
 
 const {
   libraries: {
@@ -36,21 +37,32 @@ const SpinIcon = styled(Icon)(({ spinning }) => {
 class Main extends React.Component {
   componentDidMount() {
     this.props.GetUserAccounts();
+    console.error(this);
   }
 
   refreshButton() {
     const { isBusy } = this.props;
+    if (!this.child) {
+      return <></>;
+    }
     return (
       <Button
-        onClick={() => {
-          this.props.SetBusyGatheringInfo(!isBusy);
-        }}
-        disabled={true}
-        icon={Spin}
+        onClick={() => {}}
+        disabled={isBusy}
+        icon={!isBusy ? Spin : Download}
       >
         {' '}
-        <SpinIcon icon={Spin} spinning={isBusy} />
-        {isBusy ? 'Gathering Data' : 'Up To Date'}
+        <SpinIcon icon={isBusy ? Spin : Download} spinning={isBusy} />
+        {isBusy ? (
+          'Gathering Data'
+        ) : (
+          <a
+            download={'NEXUS_HISTORY_DATA.csv'}
+            href={this.child.refs.csvLink.link}
+          >
+            Download CSV
+          </a>
+        )}
       </Button>
     );
   }
@@ -64,7 +76,11 @@ class Main extends React.Component {
         controls={this.refreshButton()}
       >
         <GlobalStyles />
-        {isLoggedIn ? <Overview /> : <div></div>}
+        {isLoggedIn ? (
+          <Overview childRef={(ref) => (this.child = ref)} />
+        ) : (
+          <div></div>
+        )}
       </Panel>
     );
   }

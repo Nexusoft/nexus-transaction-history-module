@@ -105,7 +105,6 @@ const Filters = ({
       <Select value={status} onChange={null} options={opOptions} />
     </FormField>
     {children}
-    )}
   </FiltersWrapper>
 );
 
