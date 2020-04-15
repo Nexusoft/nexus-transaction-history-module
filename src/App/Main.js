@@ -45,12 +45,12 @@ class Main extends React.Component {
         onClick={() => {
           this.props.SetBusyGatheringInfo(!isBusy);
         }}
-        disabled={isBusy}
+        disabled={true}
         icon={Spin}
       >
         {' '}
         <SpinIcon icon={Spin} spinning={isBusy} />
-        {isBusy ? 'Gathering Data' : 'Refresh'}
+        {isBusy ? 'Gathering Data' : 'Up To Date'}
       </Button>
     );
   }
