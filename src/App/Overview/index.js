@@ -134,10 +134,6 @@ class Overview extends React.Component {
   render() {
     const data = this.transformTransactionData();
     console.log(data);
-    const { userInfo } = this.props;
-    if (!userInfo) {
-      return <div>Please Sign in!</div>;
-    }
     return (
       <div>
         <Header>

@@ -29,7 +29,7 @@ const SpinIcon = styled(Icon)(({ spinning }) => {
 
 @connect(
   (state) => ({
-    isLoggedIn: true,
+    isLoggedIn: state.user.info,
     isBusy: state.ui.busyGatheringInfo,
   }),
   { GetUserAccounts, SetBusyGatheringInfo }
@@ -37,12 +37,14 @@ const SpinIcon = styled(Icon)(({ spinning }) => {
 class Main extends React.Component {
   componentDidMount() {
     this.props.GetUserAccounts();
-    console.error(this);
   }
 
   refreshButton() {
     const { isBusy } = this.props;
-    if (!this.child) {
+    console.error(this.child);
+    try {
+      const test = this.child.refs.csvLink.link;
+    } catch (error) {
       return <></>;
     }
     return (
@@ -73,13 +75,15 @@ class Main extends React.Component {
       <Panel
         title="History Module"
         icon={History}
-        controls={this.refreshButton()}
+        controls={
+          isLoggedIn && this.child && this.child.refs && this.refreshButton()
+        }
       >
         <GlobalStyles />
         {isLoggedIn ? (
           <Overview childRef={(ref) => (this.child = ref)} />
         ) : (
-          <div></div>
+          <div>Please Log In!</div>
         )}
       </Panel>
     );
