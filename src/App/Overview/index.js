@@ -4,6 +4,7 @@ import { CSVLink } from 'react-csv';
 import Filters from './Filters';
 import { GetUserAccounts, GetAccountTransactions } from 'Shared/Libraries/user';
 import { getTransactionDataPacket } from 'Shared/Libraries/transactions';
+import { GetFilteredTransactions } from './selectors';
 
 const {
   libraries: {
@@ -65,7 +66,7 @@ const Footer = styled.div({});
 
 const mapStateToProps = (state) => {
   const userInfo = state.user.info;
-
+  const { operation, fromQuery, toQuery, timeSpan } = state.ui;
   return {
     accounts: state.user.accounts,
     state: state,
@@ -73,6 +74,10 @@ const mapStateToProps = (state) => {
     history: state.history,
     transactions: state.user.transactions,
     txTotal: userInfo && state.user.info.transactions,
+    operation,
+    fromQuery,
+    toQuery,
+    timeSpan,
   };
 };
 
@@ -132,7 +137,14 @@ class Overview extends React.Component {
   }
 
   render() {
-    const data = this.transformTransactionData();
+    const { fromQuery, toQuery, timeSpan, operation } = this.props;
+    const data = GetFilteredTransactions(
+      this.transformTransactionData(),
+      fromQuery,
+      toQuery,
+      timeSpan,
+      operation
+    );
     console.log(data);
     return (
       <div>

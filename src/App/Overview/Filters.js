@@ -1,3 +1,10 @@
+import {
+  setFromQuery,
+  setToQuery,
+  setTimeSpan,
+  setOperation,
+} from 'Shared/Libraries/ui';
+
 const {
   libraries: {
     React,
@@ -24,7 +31,7 @@ const {
 
 const __ = (input) => input;
 
-const operations = ['PENDING', 'PAID', 'REJECTED', 'DRAFT'];
+const operations = ['LEGACY', 'TRUST', 'DEBIT', 'CREDIT', 'FEE', 'GENISIS'];
 
 const opOptions = [
   {
@@ -81,33 +88,58 @@ const MoreOptions = styled.div({
 });
 
 const Filters = ({
-  referenceQuery,
-  status,
+  operation,
+  fromQuery,
+  toQuery,
   timeSpan,
   morePadding,
   children,
   optionsOpen,
+  setFromQuery,
+  setToQuery,
+  setTimeSpan,
+  setOperation,
   ...rest
 }) => (
   <FiltersWrapper>
-    <FormField connectLabel label={__('Reference')}>
+    <FormField connectLabel label={__('From')}>
       <TextField
         type="search"
-        placeholder="Reference Search"
-        value={null}
-        onChange={(evt) => null}
+        placeholder="From Search"
+        value={fromQuery}
+        onChange={(evt) => setFromQuery(evt.target.value)}
+      />
+    </FormField>
+    <FormField connectLabel label={__('To')}>
+      <TextField
+        type="search"
+        placeholder="To Search"
+        value={toQuery}
+        onChange={(evt) => setToQuery(evt.target.value)}
       />
     </FormField>
     <FormField label={__('Time span')}>
-      <Select value={timeSpan} onChange={null} options={timeFrames} />
+      <Select value={timeSpan} onChange={setTimeSpan} options={timeFrames} />
     </FormField>
-    <FormField label={__('Status')}>
-      <Select value={status} onChange={null} options={opOptions} />
+    <FormField label={__('Operation')}>
+      <Select value={operation} onChange={setOperation} options={opOptions} />
     </FormField>
     {children}
   </FiltersWrapper>
 );
 
-const mapStateToProps = (state) => state;
+const mapStateToProps = ({
+  ui: { operation, fromQuery, toQuery, timeSpan },
+}) => ({
+  operation,
+  fromQuery,
+  toQuery,
+  timeSpan,
+});
 
-export default connect(mapStateToProps, {})(Filters);
+export default connect(mapStateToProps, {
+  setFromQuery,
+  setToQuery,
+  setTimeSpan,
+  setOperation,
+})(Filters);
