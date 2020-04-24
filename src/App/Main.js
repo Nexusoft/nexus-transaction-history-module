@@ -30,7 +30,7 @@ const SpinIcon = styled(Icon)(({ spinning }) => {
 @connect(
   (state) => ({
     isLoggedIn: state.user.info,
-    isBusy: state.ui.busyGatheringInfo,
+    isBusy: state.ui.busyGatheringInfo || !state.user.transactions,
   }),
   { GetUserAccounts, SetBusyGatheringInfo }
 )
@@ -73,7 +73,12 @@ class Main extends React.Component {
     const { isLoggedIn } = this.props;
     return (
       <Panel
-        title="History Module"
+        title={
+          <>
+            {'History Module'}{' '}
+            <a style={{ marginLeft: '.25em', fontSize: '10pt' }}>{'  BETA'}</a>{' '}
+          </>
+        }
         icon={History}
         controls={
           isLoggedIn && this.child && this.child.refs && this.refreshButton()

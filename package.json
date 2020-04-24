@@ -1,6 +1,6 @@
 {
   "name": "nexus_interface_history_module",
-  "version": "1.0.0",
+  "version": "0.5.0",
   "description": "Loads and Saves history data for your Nexus Account",
   "devDependencies": {
     "@babel/core": "^7.9.0",
