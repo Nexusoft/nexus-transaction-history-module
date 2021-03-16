@@ -37,7 +37,6 @@ onThemeUpdated((theme) => {
 });
 
 onUserStatusUpdated((userStatus) => {
-  console.error(userStatus);
   //if null == not logged in
   store.dispatch(UpdateUserInfo(userStatus));
 });

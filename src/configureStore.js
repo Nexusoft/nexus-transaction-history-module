@@ -11,8 +11,10 @@ const {
 
 export default function configureStore() {
   const middlewares = [
-    storageMiddleware((state) => state.history),
-    stateMiddleware((state) => state),
+    storageMiddleware(({ history }) => history),
+    stateMiddleware(({ ui, user, history, settings }) => {
+      ui, user, history, settings;
+    }),
     thunk,
   ];
   const enhancers = [applyMiddleware(...middlewares)];

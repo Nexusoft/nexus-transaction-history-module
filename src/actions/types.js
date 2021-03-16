@@ -16,3 +16,8 @@ export const SET_FROM_QUERY = 'SET_FROM_QUERY';
 export const SET_TO_QUERY = 'SET_TO_QUERY';
 export const SET_TIMESPAN = 'SET_TIMESPAN';
 export const SET_OPERATION = 'SET_OPERATION';
+
+export const SET_POP_UP = 'SET_POP_UP';
+export const CLOSE_POP_UP = 'CLOSE_POP_UP';
+
+export const SET_SETTINGS = 'SET_SETTINGS';

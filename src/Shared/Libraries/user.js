@@ -18,15 +18,15 @@ async function asyncForEach(array, callback) {
   }
 }
 
-export const GetAccountTransactions = (accounts) => async (dispatch) => {
+export const GetAccountTransactions = (accounts, limit) => async (dispatch) => {
   try {
-    console.log(accounts);
     let transactions = [];
     if (accounts) {
       await asyncForEach(accounts, async (account) => {
         if (account.token === '0') {
           const result = await apiCall('finance/list/account/transactions', {
             address: account.address,
+            limit: limit || 100,
           });
           console.log(result);
           result.forEach((element) => {
@@ -81,7 +81,6 @@ fiatAmount: 569.1
 
 async function getLegacyTransactions(tritiumTransactions) {
   const result = await rpcCall('listtransactions', [['*', 9999, 0]]);
-  console.error(result);
   const reFormat = result
     .map((e) => ({
       OP: 'LEGACY',
@@ -94,7 +93,6 @@ async function getLegacyTransactions(tritiumTransactions) {
       timestamp: e.time,
     }))
     .filter((e) => !tritiumTransactions.some((a) => a.txid == e.txid));
-  console.error(reFormat);
   return reFormat;
 }
 

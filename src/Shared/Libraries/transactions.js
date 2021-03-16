@@ -8,37 +8,37 @@ export const getTransactionDataPacket = (
   timestamp,
   fiat
 ) => async (dispatch, getState) => {
-  console.log('gettransctionsDataPacekets');
+  //console.log('gettransctionsDataPacekets');
   dispatch({ type: TYPE.SET_GATHERING_INFO, payload: true });
   try {
-    console.log('aadsd');
+    //console.log('aadsd');
     asyncForEach(
       transactions,
       dispatch,
       getState,
       async (tx, {}, {}) => {
-        console.log(tx);
+        //console.log(tx);
         const txID = tx.txid;
-        console.log('gettransctionDataPaceket');
+        //console.log('gettransctionDataPaceket');
         const past = getState().history.transactions[txID];
         if (past) {
           return;
         }
         const txInfo = await getTransactionMoreInfo(txID);
-        console.log(txInfo);
-        console.log(dispatch);
-        console.log(getState);
+        //console.log(txInfo);
+        //console.log(dispatch);
+        //console.log(getState);
         const historyInfo = await getHistoricInfo(
           txInfo.timestamp,
           fiat,
           dispatch,
           getState
         );
-        console.log(historyInfo);
-        console.log(historyInfo[txInfo.timestamp]);
-        console.log(historyInfo[txInfo.timestamp][fiat]);
+        //console.log(historyInfo);
+        //console.log(historyInfo[txInfo.timestamp]);
+        //console.log(historyInfo[txInfo.timestamp][fiat]);
         const waitTwoSeconds = await delay(2000);
-        console.log(waitTwoSeconds);
+        //console.log(waitTwoSeconds);
         let dataPacket = {};
         dataPacket[txID] = {
           timestamp: txInfo.timestamp,
@@ -49,7 +49,6 @@ export const getTransactionDataPacket = (
           },
         };
 
-        console.error(dataPacket);
         dispatch({
           type: TYPE.ADD_TRANSACTION_DATAPACKET,
           payload: dataPacket,
@@ -57,7 +56,7 @@ export const getTransactionDataPacket = (
       },
       () => {
         dispatch({ type: TYPE.SET_GATHERING_INFO, payload: false });
-        console.log('Completed');
+        //console.log('Completed');
       }
     );
   } catch (error) {
@@ -66,7 +65,7 @@ export const getTransactionDataPacket = (
 };
 
 async function asyncForEach(array, dispatch, getState, callback, onComplete) {
-  console.log(callback);
+  //console.log(callback);
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array, dispatch, getState);
   }
@@ -94,10 +93,10 @@ async function getHistoricInfo(timestamp, fiat, dispatch, getState) {
       `https://min-api.cryptocompare.com/data/pricehistorical?fsym=NXS&tsyms=USD&ts=${timestamp}`,
       {}
     );
-    console.log(result.data.NXS.USD);
-    console.log(fiat);
-    console.log(timestamp);
-    console.log(getState);
+    //console.log(result.data.NXS.USD);
+    //console.log(fiat);
+    //console.log(timestamp);
+    //console.log(getState);
 
     let dataPacket = {};
     dataPacket[timestamp] = {};

@@ -18,17 +18,14 @@ export default (state = initialState, action) => {
       }
       return storage;
     case TYPE.ADD_TRANSACTION_DATAPACKET:
-      console.log(state);
       const newTransactions = {
         ...state,
+        foo: 'bar',
         transactions: { ...state.transactions, ...action.payload },
       };
-      console.log(newTransactions);
       updateStorage(newTransactions);
       return newTransactions;
     case TYPE.ADD_TIMESTAMP_DATAPACKET:
-      console.log(state);
-
       const newTimestamps = {
         ...state,
         timestamps: { ...state.timestamps, ...action.payload },

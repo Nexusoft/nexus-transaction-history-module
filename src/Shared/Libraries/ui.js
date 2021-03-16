@@ -36,3 +36,19 @@ export const setOperation = (op) => async (dispatch) => {
     payload: op,
   });
 };
+
+export const OpenPopUp = (component, props) => async (dispatch) => {
+  console.log(component);
+  dispatch({
+    type: TYPE.SET_POP_UP,
+    payload: { div: component, props: props },
+  });
+};
+
+export const ClosePopUp = () => async (dispatch) => {
+  console.log('CLOSING');
+  dispatch({
+    type: TYPE.CLOSE_POP_UP,
+    payload: null,
+  });
+};

@@ -1,4 +1,5 @@
 import Main from './Main';
+import { ClosePopUp } from 'Shared/Libraries/ui';
 
 const {
   libraries: {
@@ -13,12 +14,19 @@ const {
   utilities: { color },
 } = NEXUS;
 
-const emotionCache = createCache({ container: document.head });
+const emotionCache = createCache({
+  key: 'nexus-history-module',
+  container: document.head,
+});
 
-@connect(state => ({
-  initialized: state.initialized,
-  theme: state.theme,
-}))
+@connect(
+  (state) => ({
+    initialized: state.initialized,
+    theme: state.theme,
+    PopUp: state.popUps,
+  }),
+  { ClosePopUp }
+)
 class App extends React.Component {
   render() {
     const { initialized, theme } = this.props;
@@ -29,9 +37,17 @@ class App extends React.Component {
       mixer: color.getMixer(theme.background, theme.foreground),
     };
 
+    const { PopUp } = this.props;
+
     return (
       <CacheProvider value={emotionCache}>
         <ThemeProvider theme={themeWithMixer}>
+          {PopUp ? (
+            <PopUp.div
+              {...PopUp.props}
+              removeModal={() => this.props.ClosePopUp()}
+            />
+          ) : null}{' '}
           <Main />
         </ThemeProvider>
       </CacheProvider>

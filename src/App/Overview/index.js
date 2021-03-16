@@ -70,6 +70,7 @@ const mapStateToProps = (state) => {
   return {
     accounts: state.user.accounts,
     state: state,
+    settings: state.settings,
     userInfo: userInfo,
     history: state.history,
     transactions: state.user.transactions,
@@ -99,7 +100,10 @@ class Overview extends React.Component {
     }
     if (this.props.accounts && prevProps.accounts != this.props.accounts) {
       console.log(this.props);
-      this.props.GetAccountTransactions(this.props.accounts);
+      this.props.GetAccountTransactions(
+        this.props.accounts,
+        this.props.settings.nexusApiLimit
+      );
     }
 
     if (
@@ -110,7 +114,10 @@ class Overview extends React.Component {
     }
     if (this.props.txTotal && this.props.txTotal != prevProps.txTotal) {
       this.props.GetUserAccounts();
-      this.props.GetAccountTransactions(this.props.accounts);
+      this.props.GetAccountTransactions(
+        this.props.accounts,
+        this.props.settings.nexusApiLimit
+      );
     }
   }
 
@@ -145,7 +152,6 @@ class Overview extends React.Component {
       timeSpan,
       operation
     );
-    console.log(data);
     return (
       <div>
         <Header>

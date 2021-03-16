@@ -1,10 +1,13 @@
 import { GetUserAccounts } from 'Shared/Libraries/user';
-import { SetBusyGatheringInfo } from 'Shared/Libraries/ui';
+import { SetBusyGatheringInfo, OpenPopUp } from 'Shared/Libraries/ui';
 
 import Overview from './Overview';
 import History from 'Shared/Images/History.svg';
 import Spin from 'Shared/Images/recovery.svg';
 import Download from 'Shared/Images/download.svg';
+import SettingsIcon from 'Shared/Images/gear.svg';
+
+import Settings from './Overview/Settings';
 
 const {
   libraries: {
@@ -32,7 +35,7 @@ const SpinIcon = styled(Icon)(({ spinning }) => {
     isLoggedIn: state.user.info,
     isBusy: state.ui.busyGatheringInfo || !state.user.transactions,
   }),
-  { GetUserAccounts, SetBusyGatheringInfo }
+  { OpenPopUp, GetUserAccounts, SetBusyGatheringInfo }
 )
 class Main extends React.Component {
   componentDidMount() {
@@ -41,7 +44,6 @@ class Main extends React.Component {
 
   refreshButton() {
     const { isBusy } = this.props;
-    console.error(this.child);
     try {
       const test = this.child.refs.csvLink.link;
     } catch (error) {
@@ -69,6 +71,17 @@ class Main extends React.Component {
     );
   }
 
+  settingButton() {
+    return (
+      <Button
+        onClick={() => {
+          this.props.OpenPopUp(Settings);
+        }}
+        icon={SettingsIcon}
+      ></Button>
+    );
+  }
+
   render() {
     const { isLoggedIn } = this.props;
     return (
@@ -81,7 +94,13 @@ class Main extends React.Component {
         }
         icon={History}
         controls={
-          isLoggedIn && this.child && this.child.refs && this.refreshButton()
+          <>
+            {isLoggedIn &&
+              this.child &&
+              this.child.refs &&
+              this.refreshButton()}
+            {this.settingButton()}
+          </>
         }
       >
         <GlobalStyles />
