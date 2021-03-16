@@ -7,8 +7,6 @@ import Spin from 'Shared/Images/recovery.svg';
 import Download from 'Shared/Images/download.svg';
 import SettingsIcon from 'Shared/Images/gear.svg';
 
-import Settings from './Overview/Settings';
-
 const {
   libraries: {
     React,
@@ -41,17 +39,12 @@ class Main extends React.Component {
     this.props.GetUserAccounts();
   }
 
-  refreshButton() {
+  refreshButton(isActive) {
     const { isBusy } = this.props;
-    try {
-      const test = this.child.refs.csvLink.link;
-    } catch (error) {
-      return <></>;
-    }
     return (
       <Button
         onClick={() => {}}
-        disabled={isBusy}
+        disabled={!isActive || isBusy}
         icon={!isBusy ? Spin : Download}
       >
         {' '}
@@ -76,8 +69,9 @@ class Main extends React.Component {
         onClick={() => {
           this.props.OpenPopUp('Settings');
         }}
-        icon={SettingsIcon}
-      ></Button>
+      >
+        <Icon icon={SettingsIcon} />
+      </Button>
     );
   }
 
@@ -93,13 +87,16 @@ class Main extends React.Component {
         }
         icon={History}
         controls={
-          <>
-            {isLoggedIn &&
-              this.child &&
-              this.child.refs &&
-              this.refreshButton()}
+          <div
+            style={{
+              display: 'grid',
+              gridAutoFlow: 'column',
+              columnGap: '1em',
+            }}
+          >
+            {this.refreshButton(isLoggedIn && this.child && this.child.refs)}
             {this.settingButton()}
-          </>
+          </div>
         }
       >
         <GlobalStyles />
