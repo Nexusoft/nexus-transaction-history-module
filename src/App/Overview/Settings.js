@@ -13,21 +13,20 @@ const {
   },
   components: {
     Icon,
-    Panel,
-    AutoSuggest,
     FieldSet,
-    Field,
     Switch,
     Modal,
-    Tooltip,
     Select,
     DateTime,
     TextField,
     FormField,
     Button,
   },
-  utilities: { updateStorage },
 } = NEXUS;
+
+const Field = styled.div({
+  display: 'contents',
+});
 
 /**
  * The Internal Send Form in the Send Page
@@ -40,15 +39,8 @@ const {
   SetSettings,
 })
 class Settings extends Component {
-  //constructor(props) {
-  //  super(props);
-  //}
-  componentDidMount() {}
-
   render() {
     const { SetSettings } = this.props;
-
-    console.log(this.props);
     return (
       <Modal
         removeModal={this.props.removeModal}
@@ -61,23 +53,21 @@ class Settings extends Component {
         <Modal.Body>
           <FieldSet legend={'Settings'}>
             <div className="flex space-between">
-              <div className="text-center">
-                <div>
-                  <strong>{'Nexus Api Call Limit'}</strong>
-                  <TextField
-                    type={'number'}
-                    min={100}
-                    value={this.props.settings.nexusApiLimit}
-                    onChange={(ele) =>
-                      SetSettings({ nexusApiLimit: ele.target.value })
-                    }
-                  ></TextField>
-                </div>
-              </div>
+              <Field>
+                <strong>{'Nexus Api Call Limit'}</strong>
+                <TextField
+                  type={'number'}
+                  min={100}
+                  value={this.props.settings.nexusApiLimit}
+                  onChange={(ele) =>
+                    SetSettings({ nexusApiLimit: ele.target.value })
+                  }
+                ></TextField>
+              </Field>
             </div>
           </FieldSet>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer style={{ display: 'grid', paddingTop: 0 }}>
           <Button onClick={this.props.removeModal}>Close</Button>
         </Modal.Footer>
       </Modal>
