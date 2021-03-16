@@ -14,6 +14,9 @@ const Table = ({ data, columns, defaultSortingColumnIndex, ...rest }) => (
     defaultSorted={[{ ...columns[defaultSortingColumnIndex], desc: true }]}
     rowsText={'rows'}
     previousText={'< ' + 'Previous'}
+    getTbodyProps={() => {
+      return { style: { overflow: 'hidden' } };
+    }}
     nextText={'Next' + ' >'}
     {...rest}
     className={`-striped -highlight ${rest.className}`}
