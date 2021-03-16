@@ -154,7 +154,6 @@ class Overview extends React.Component {
     return (
       <div>
         <Header>
-          <h3>Filters</h3>
           <Filters />
         </Header>
 
