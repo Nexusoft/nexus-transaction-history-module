@@ -24,7 +24,6 @@ const spin = core.keyframes`
 `;
 
 const SpinIcon = styled(Icon)(({ spinning }) => {
-  console.log(spinning);
   return {
     animation: spinning ? `${spin} 1s linear infinite` : 'none',
   };

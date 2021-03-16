@@ -69,7 +69,6 @@ const mapStateToProps = (state) => {
   const { operation, fromQuery, toQuery, timeSpan } = state.ui;
   return {
     accounts: state.user.accounts,
-    state: state,
     settings: state.settings,
     userInfo: userInfo,
     history: state.history,
@@ -99,7 +98,6 @@ class Overview extends React.Component {
       return;
     }
     if (this.props.accounts && prevProps.accounts != this.props.accounts) {
-      console.log(this.props);
       this.props.GetAccountTransactions(
         this.props.accounts,
         this.props.settings.nexusApiLimit
@@ -136,6 +134,7 @@ class Overview extends React.Component {
       this.props.history.transactions[e.txid]
         ? {
             ...e,
+            to: e.to || (e.OP === 'FEE' && 'Fee Reserve'),
             timestamp: this.props.history.transactions[e.txid].timestamp,
             fiatAmount: this.props.history.transactions[e.txid].fiat.totalValue,
           }
