@@ -1,5 +1,5 @@
 import Main from './Main';
-import { ClosePopUp } from 'Shared/Libraries/ui';
+import PopupResolver from './PopupResolver';
 
 const {
   libraries: {
@@ -25,7 +25,7 @@ const emotionCache = createCache({
     theme: state.theme,
     PopUp: state.popUps,
   }),
-  { ClosePopUp }
+  {}
 )
 class App extends React.Component {
   render() {
@@ -42,12 +42,7 @@ class App extends React.Component {
     return (
       <CacheProvider value={emotionCache}>
         <ThemeProvider theme={themeWithMixer}>
-          {PopUp ? (
-            <PopUp.div
-              {...PopUp.props}
-              removeModal={() => this.props.ClosePopUp()}
-            />
-          ) : null}{' '}
+          <PopupResolver popUps={PopUp} />
           <Main />
         </ThemeProvider>
       </CacheProvider>

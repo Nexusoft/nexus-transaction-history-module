@@ -1,13 +1,13 @@
 import * as TYPE from 'actions/types';
 
-const initialState = null;
+const initialState = [];
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case TYPE.SET_POP_UP:
-      return action.payload;
+      return [{ ...action.payload, id: `popup-${state.length}` }];
     case TYPE.CLOSE_POP_UP:
-      return null;
+      return [];
     default:
       return state;
   }

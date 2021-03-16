@@ -74,7 +74,7 @@ class Main extends React.Component {
     return (
       <Button
         onClick={() => {
-          this.props.OpenPopUp(Settings);
+          this.props.OpenPopUp('Settings');
         }}
         icon={SettingsIcon}
       ></Button>

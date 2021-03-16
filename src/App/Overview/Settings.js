@@ -39,7 +39,7 @@ const {
   ClosePopUp,
   SetSettings,
 })
-class SettingsModal extends Component {
+class Settings extends Component {
   //constructor(props) {
   //  super(props);
   //}
@@ -85,4 +85,4 @@ class SettingsModal extends Component {
   }
 }
 
-export default SettingsModal;
+export default Settings;

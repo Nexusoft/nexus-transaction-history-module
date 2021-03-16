@@ -37,11 +37,11 @@ export const setOperation = (op) => async (dispatch) => {
   });
 };
 
-export const OpenPopUp = (component, props) => async (dispatch) => {
-  console.log(component);
+export const OpenPopUp = (componentName, props) => async (dispatch) => {
+  console.log(componentName);
   dispatch({
     type: TYPE.SET_POP_UP,
-    payload: { div: component, props: props },
+    payload: { name: componentName, props: props },
   });
 };
 
