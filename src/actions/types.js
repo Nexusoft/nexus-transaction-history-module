@@ -21,3 +21,5 @@ export const SET_POP_UP = 'SET_POP_UP';
 export const CLOSE_POP_UP = 'CLOSE_POP_UP';
 
 export const SET_SETTINGS = 'SET_SETTINGS';
+
+export const REMOVE_SAVE_DATA = 'REMOVE_SAVE_DATA';

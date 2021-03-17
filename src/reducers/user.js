@@ -30,6 +30,8 @@ export default (state = initialState, action) => {
         ...state,
         info: action.payload,
       };
+    case TYPE.REMOVE_SAVE_DATA:
+      return { ...state, transactions: null };
     default:
       return state;
   }

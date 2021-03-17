@@ -97,6 +97,8 @@ class Overview extends React.Component {
       //Not Logged in
       return;
     }
+
+    //TODO: Redo all of this
     if (this.props.accounts && prevProps.accounts != this.props.accounts) {
       this.props.GetAccountTransactions(
         this.props.accounts,
@@ -110,8 +112,15 @@ class Overview extends React.Component {
     ) {
       this.getTransactionHistory();
     }
+
     if (this.props.txTotal && this.props.txTotal != prevProps.txTotal) {
       this.props.GetUserAccounts();
+      this.props.GetAccountTransactions(
+        this.props.accounts,
+        this.props.settings.nexusApiLimit
+      );
+    }
+    if (this.props.txTotal !== 0 && !this.props.transactions) {
       this.props.GetAccountTransactions(
         this.props.accounts,
         this.props.settings.nexusApiLimit

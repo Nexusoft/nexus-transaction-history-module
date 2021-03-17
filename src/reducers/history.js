@@ -20,7 +20,6 @@ export default (state = initialState, action) => {
     case TYPE.ADD_TRANSACTION_DATAPACKET:
       const newTransactions = {
         ...state,
-        foo: 'bar',
         transactions: { ...state.transactions, ...action.payload },
       };
       updateStorage(newTransactions);
@@ -32,6 +31,9 @@ export default (state = initialState, action) => {
       };
       updateStorage(newTimestamps);
       return newTimestamps;
+    case TYPE.REMOVE_SAVE_DATA:
+      updateStorage({});
+      return initialState;
     default:
       return state;
   }

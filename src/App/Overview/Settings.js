@@ -2,7 +2,7 @@
 
 // Internal Global
 import { ClosePopUp } from 'Shared/Libraries/ui';
-import { SetSettings } from 'Shared/Libraries/settings';
+import { RemoveSaveData, SetSettings } from 'Shared/Libraries/settings';
 
 const {
   libraries: {
@@ -25,7 +25,9 @@ const {
 } = NEXUS;
 
 const Field = styled.div({
-  display: 'contents',
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
 });
 
 /**
@@ -37,10 +39,11 @@ const Field = styled.div({
 @connect((state) => ({ settings: state.settings }), {
   ClosePopUp,
   SetSettings,
+  RemoveSaveData,
 })
 class Settings extends Component {
   render() {
-    const { SetSettings } = this.props;
+    const { SetSettings, RemoveSaveData } = this.props;
     return (
       <Modal
         removeModal={this.props.removeModal}
@@ -52,7 +55,16 @@ class Settings extends Component {
       >
         <Modal.Body>
           <FieldSet legend={'Settings'}>
-            <div className="flex space-between">
+            <div
+              style={{
+                justifyContent: 'space-between',
+                alignItems: 'stretch',
+                flex: 1,
+                minHeight: '10em',
+                flexDirection: 'column',
+                display: 'flex',
+              }}
+            >
               <Field>
                 <strong>{'Nexus Api Call Limit'}</strong>
                 <TextField
@@ -63,6 +75,15 @@ class Settings extends Component {
                     SetSettings({ nexusApiLimit: ele.target.value })
                   }
                 ></TextField>
+              </Field>
+              <Field>
+                <strong>{'Delete Saved Data'}</strong>
+                <Button
+                  style={{ width: '50%', maxWidth: '20em' }}
+                  onClick={() => RemoveSaveData()}
+                >
+                  Delete
+                </Button>
               </Field>
             </div>
           </FieldSet>
