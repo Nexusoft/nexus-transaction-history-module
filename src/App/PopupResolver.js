@@ -9,13 +9,13 @@ const {
   },
 } = NEXUS;
 
-const available = [Settings];
+const available = { Settings: Settings };
 
 @connect((state) => ({}), { ClosePopUp })
 class Popups extends React.Component {
   returnClasses = (popUpList) =>
     popUpList.map((e) => ({
-      div: available.find((d) => d.displayName.includes(e.name)),
+      div: available[e.name],
       props: e.props,
       id: e.id,
     }));
