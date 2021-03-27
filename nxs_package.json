@@ -1,7 +1,7 @@
 {
   "name": "nexus_interface_history_module",
   "displayName": "History Module",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "targetWalletVersion": "3.0.3",
   "description": "Loads and Saves history data for your Nexus Account",
   "type": "app",

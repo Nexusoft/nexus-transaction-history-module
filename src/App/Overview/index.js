@@ -22,7 +22,7 @@ const {
   },
 } = NEXUS;
 
-const columns = [
+const columns = (locale) => [
   {
     id: 'op',
     Header: 'Operation',
@@ -41,6 +41,15 @@ const columns = [
   {
     id: 'timestamp',
     Header: 'Date Time',
+    Cell: (cell) =>
+      Intl.DateTimeFormat(locale, {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+      }).format(cell.value * 1000),
     accessor: 'timestamp',
   },
   {
@@ -143,7 +152,10 @@ class Overview extends React.Component {
       this.props.history.transactions[e.txid]
         ? {
             ...e,
-            to: e.to || (e.OP === 'FEE' && 'Fee Reserve'),
+            to:
+              e.to ||
+              (e.OP === 'FEE' && 'Fee Reserve') ||
+              (e.O === 'TRUST' && 'Trust Reward'),
             timestamp: this.props.history.transactions[e.txid].timestamp,
             fiatAmount: this.props.history.transactions[e.txid].fiat.totalValue,
           }
@@ -169,7 +181,7 @@ class Overview extends React.Component {
         <Table
           defaultSortingColumnIndex={0}
           data={data}
-          columns={columns}
+          columns={columns(this.props.settings.locale)}
           defaultSortingColumnIndex={3}
           defaultPageSize={10}
         />
