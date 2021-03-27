@@ -42,14 +42,16 @@ const columns = (locale) => [
     id: 'timestamp',
     Header: 'Date Time',
     Cell: (cell) =>
-      Intl.DateTimeFormat(locale, {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-      }).format(cell.value * 1000),
+      cell.value
+        ? Intl.DateTimeFormat(locale, {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+          }).format(cell.value * 1000)
+        : '',
     accessor: 'timestamp',
   },
   {
@@ -155,7 +157,8 @@ class Overview extends React.Component {
             to:
               e.to ||
               (e.OP === 'FEE' && 'Fee Reserve') ||
-              (e.O === 'TRUST' && 'Trust Reward'),
+              (e.OP === 'TRUST' && 'Trust Reward'),
+            from: e.from || (e.OP === 'TRUST' && 'Trust Mint'),
             timestamp: this.props.history.transactions[e.txid].timestamp,
             fiatAmount: this.props.history.transactions[e.txid].fiat.totalValue,
           }
