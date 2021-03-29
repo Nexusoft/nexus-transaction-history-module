@@ -42,14 +42,16 @@ const columns = (locale) => [
     id: 'timestamp',
     Header: 'Date Time',
     Cell: (cell) =>
-      Intl.DateTimeFormat(locale, {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-      }).format(cell.value * 1000),
+      cell.value
+        ? Intl.DateTimeFormat(locale, {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+          }).format(cell.value * 1000)
+        : '',
     accessor: 'timestamp',
   },
   {
