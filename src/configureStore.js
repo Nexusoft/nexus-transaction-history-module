@@ -11,9 +11,11 @@ const {
 
 export default function configureStore() {
   const middlewares = [
-    storageMiddleware(({ history }) => history),
-    stateMiddleware(({ ui, user, history, settings }) => {
-      ui, user, history, settings;
+    storageMiddleware(({ settings, history }) => {
+      settings, history;
+    }),
+    stateMiddleware(({ ui, user, history }) => {
+      ui, user, history;
     }),
     thunk,
   ];
