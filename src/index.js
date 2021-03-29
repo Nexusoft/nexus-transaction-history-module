@@ -29,7 +29,6 @@ onceInitialize((data) => {
 
 onCoreInfoUpdated((coreInfo) => {
   store.dispatch(updateCoreInfo(coreInfo));
-  //store.dispatch(UpdateUserInfo());
 });
 
 onThemeUpdated((theme) => {

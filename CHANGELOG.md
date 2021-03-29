@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8.2
+
+- Fixed Storage Issue not saving settings
+
 ## v0.8.1
 
 - Added Time format

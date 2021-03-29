@@ -12,27 +12,20 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case TYPE.INITIALIZE:
-      const storage = action.payload.storageData;
-      if (JSON.stringify(storage) === '{}') {
-        return initialState;
-      }
-      return storage;
+      return { ...initialState, ...action.payload.storageData.history };
     case TYPE.ADD_TRANSACTION_DATAPACKET:
       const newTransactions = {
         ...state,
         transactions: { ...state.transactions, ...action.payload },
       };
-      updateStorage(newTransactions);
       return newTransactions;
     case TYPE.ADD_TIMESTAMP_DATAPACKET:
       const newTimestamps = {
         ...state,
         timestamps: { ...state.timestamps, ...action.payload },
       };
-      updateStorage(newTimestamps);
       return newTimestamps;
     case TYPE.REMOVE_SAVE_DATA:
-      updateStorage({});
       return initialState;
     default:
       return state;
