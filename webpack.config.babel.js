@@ -8,7 +8,6 @@ export default {
     path: path.resolve(__dirname, 'dist/js'),
     filename: 'app.js',
   },
-  node: { fs: 'empty' },
   target: 'web',
   resolve: {
     extensions: ['.js', '.jsx', '.json'],
@@ -24,13 +23,10 @@ export default {
         test: /\.svg$/,
         use: [
           {
-            loader: 'svg-sprite-loader',
+            loader: 'file-loader',
           },
           {
             loader: 'svgo-loader',
-            options: {
-              externalConfig: 'svgo-config.json',
-            },
           },
         ],
       },

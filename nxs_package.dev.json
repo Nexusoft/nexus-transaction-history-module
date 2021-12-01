@@ -1,6 +1,7 @@
 {
   "name": "_dev_nexus_interface_history_module",
   "displayName": "Nexus Transaction History Module",
+  "description": "Loads and Saves history data for your Nexus Account",
   "type": "app",
   "entry": "http://localhost:24011/dev.html",
   "icon": "dist/logo.svg"

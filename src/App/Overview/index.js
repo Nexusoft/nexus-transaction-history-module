@@ -27,16 +27,20 @@ const columns = (locale) => [
     id: 'op',
     Header: 'Operation',
     accessor: 'OP',
+    width: '6em',
+    maxWidth: '6em',
   },
   {
     id: 'from',
     Header: 'From',
     accessor: 'from',
+    width: '25em',
   },
   {
     id: 'to',
     Header: 'To',
     accessor: 'to',
+    width: '25em',
   },
   {
     id: 'timestamp',
@@ -68,6 +72,22 @@ const columns = (locale) => [
     id: 'txid',
     Header: 'TX ID',
     accessor: 'txid',
+    Cell: (cell) => {
+      const dislength = 4;
+      return cell.value ? (
+        <Tooltip.Trigger position={'left'} tooltip={cell.value}>
+          <a onClick={() => {}}>
+            {`${cell.value.substring(0, dislength)}.....${cell.value.substring(
+              cell.value.length - dislength,
+              cell.value.length
+            )}
+            `}
+          </a>
+        </Tooltip.Trigger>
+      ) : (
+        ''
+      );
+    },
   },
 ];
 
@@ -179,12 +199,10 @@ class Overview extends React.Component {
         <Header>
           <Filters />
         </Header>
-
         <Table
-          defaultSortingColumnIndex={0}
           data={data}
           columns={columns(this.props.settings.locale)}
-          defaultSortingColumnIndex={3}
+          defaultSortingColumnId={'timestamp'}
           defaultPageSize={10}
         />
         <Footer>

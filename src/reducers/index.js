@@ -5,7 +5,7 @@ import ui from './ui';
 import user from './user';
 import history from './history';
 import settings from './settings';
-import popUps from './popUps';
+import modal from './modal';
 
 const {
   libraries: {
@@ -22,6 +22,6 @@ export default function createReducer() {
     user,
     history,
     settings,
-    popUps,
+    modal,
   });
 }

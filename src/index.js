@@ -4,8 +4,8 @@ import {
   initialize,
   updateCoreInfo,
   updateTheme,
+  updateUserStatus,
 } from './actions/actionCreators';
-import { UpdateUserInfo } from 'Shared/Libraries/user';
 
 const store = configureStore();
 
@@ -18,8 +18,8 @@ const {
   utilities: {
     onceInitialize,
     onCoreInfoUpdated,
-    onUserStatusUpdated,
     onThemeUpdated,
+    onUserStatusUpdated,
   },
 } = NEXUS;
 
@@ -37,7 +37,7 @@ onThemeUpdated((theme) => {
 
 onUserStatusUpdated((userStatus) => {
   //if null == not logged in
-  store.dispatch(UpdateUserInfo(userStatus));
+  store.dispatch(updateUserStatus(userStatus));
 });
 
 ReactDOM.render(

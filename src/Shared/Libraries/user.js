@@ -5,7 +5,9 @@ const {
 
 export const GetUserAccounts = () => async (dispatch) => {
   try {
-    const result = await apiCall('users/list/accounts');
+    const result = await apiCall('finance/list/all', {
+      where: 'object.token=0',
+    });
     dispatch({ type: TYPE.SET_USER_ACCOUNTS, payload: result });
   } catch (error) {
     console.error(error);
@@ -24,11 +26,10 @@ export const GetAccountTransactions = (accounts, limit) => async (dispatch) => {
     if (accounts) {
       await asyncForEach(accounts, async (account) => {
         if (account.token === '0') {
-          const result = await apiCall('finance/list/account/transactions', {
+          const result = await apiCall('finance/transactions/all', {
             address: account.address,
             limit: limit || 100,
           });
-          console.log(result);
           result.forEach((element) => {
             const temp = element.contracts
               .map((e) => {

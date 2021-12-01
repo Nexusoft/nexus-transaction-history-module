@@ -6,15 +6,14 @@ const publicPath = `http://localhost:${port}/`;
 
 const config = {
   ...baseConfig,
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'eval-source-map',
   devServer: {
     port,
-    publicPath,
-    inline: true,
+    hot: true,
     compress: true,
+    historyApiFallback: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
-    contentBase: path.join(process.cwd(), 'dist'),
-    watchContentBase: true,
+    static: path.join(process.cwd(), 'dist'),
   },
 };
 

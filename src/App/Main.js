@@ -1,5 +1,6 @@
 import { GetUserAccounts } from 'Shared/Libraries/user';
-import { SetBusyGatheringInfo, OpenPopUp } from 'Shared/Libraries/ui';
+import { SetBusyGatheringInfo } from 'Shared/Libraries/ui';
+import { OpenModal } from 'actions/actionCreators';
 
 import Overview from './Overview';
 import History from 'Shared/Images/History.svg';
@@ -32,7 +33,7 @@ const SpinIcon = styled(Icon)(({ spinning }) => {
     isLoggedIn: state.user.info,
     isBusy: state.ui.busyGatheringInfo || !state.user.transactions,
   }),
-  { OpenPopUp, GetUserAccounts, SetBusyGatheringInfo }
+  { OpenModal, GetUserAccounts, SetBusyGatheringInfo }
 )
 class Main extends React.Component {
   componentDidMount() {
@@ -64,19 +65,21 @@ class Main extends React.Component {
   }
 
   settingButton() {
+    console.dir(SettingsIcon);
     return (
       <Button
         onClick={() => {
-          this.props.OpenPopUp('Settings');
+          this.props.OpenModal('Settings');
         }}
       >
-        <Icon icon={SettingsIcon} />
+        <Icon icon={{ url: SettingsIcon, id: 'gear' }} />
       </Button>
     );
   }
 
   render() {
     const { isLoggedIn } = this.props;
+
     return (
       <Panel
         title={

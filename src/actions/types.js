@@ -2,6 +2,7 @@ export const INITIALIZE = 'INITIALIZE';
 
 export const UPDATE_CORE_INFO = 'UPDATE_CORE_INFO';
 export const UPDATE_THEME = 'UPDATE_THEME';
+export const UPDATE_USER_STATUS = 'UPDATE_USER_STATUS';
 
 export const SET_USER_ACCOUNTS = 'SET_USER_ACCOUNTS';
 export const SET_ACCOUNT_TRANSACTIONS = 'SET_ACCOUNT_TRANSACTIONS';
@@ -17,8 +18,8 @@ export const SET_TO_QUERY = 'SET_TO_QUERY';
 export const SET_TIMESPAN = 'SET_TIMESPAN';
 export const SET_OPERATION = 'SET_OPERATION';
 
-export const SET_POP_UP = 'SET_POP_UP';
-export const CLOSE_POP_UP = 'CLOSE_POP_UP';
+export const OPEN_MODAL = 'OPEN_MODAL';
+export const CLOSE_MODAL = 'CLOSE_MODAL';
 
 export const SET_SETTINGS = 'SET_SETTINGS';
 

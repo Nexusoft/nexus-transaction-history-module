@@ -1,5 +1,7 @@
 import { ClosePopUp } from 'Shared/Libraries/ui';
 
+import { CloseModal } from 'actions/actionCreators';
+
 import Settings from './Overview/Settings';
 
 const {
@@ -11,7 +13,7 @@ const {
 
 const available = { Settings: Settings };
 
-@connect((state) => ({}), { ClosePopUp })
+@connect((state) => ({}), { CloseModal })
 class Popups extends React.Component {
   returnClasses = (popUpList) =>
     popUpList.map((e) => ({
@@ -23,11 +25,7 @@ class Popups extends React.Component {
   render() {
     const popUpList = this.props.popUps;
     const pops = this.returnClasses(popUpList).map((E) => (
-      <E.div
-        key={E.id}
-        {...E.props}
-        removeModal={() => this.props.ClosePopUp()}
-      />
+      <E.div key={E.id} {...E.props} removeModal={CloseModal} />
     ));
     console.log(pops);
     return <>{pops}</>;

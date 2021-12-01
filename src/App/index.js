@@ -1,5 +1,4 @@
 import Main from './Main';
-import PopupResolver from './PopupResolver';
 
 const {
   libraries: {
@@ -8,16 +7,18 @@ const {
     emotion: {
       createCache,
       core: { CacheProvider },
-      theming: { ThemeProvider },
     },
   },
   utilities: { color },
+  components: { ThemeController },
 } = NEXUS;
 
 const emotionCache = createCache({
   key: 'nexus-history-module',
   container: document.head,
 });
+
+const modalList = {};
 
 @connect(
   (state) => ({
@@ -29,22 +30,18 @@ const emotionCache = createCache({
 )
 class App extends React.Component {
   render() {
-    const { initialized, theme } = this.props;
+    const { initialized, theme, modal } = this.props;
     if (!initialized) return null;
-
-    const themeWithMixer = {
-      ...theme,
-      mixer: color.getMixer(theme.background, theme.foreground),
-    };
-
-    const { PopUp } = this.props;
+    const Modal = modal && modalList[modal.name];
 
     return (
       <CacheProvider value={emotionCache}>
-        <ThemeProvider theme={themeWithMixer}>
-          <PopupResolver popUps={PopUp} />
-          <Main />
-        </ThemeProvider>
+        <ThemeController theme={theme}>
+          {Modal && (
+            <Modal {...modal.props} removeModal={() => dispatch(CloseModal)} />
+          )}
+          <Main history={history} />
+        </ThemeController>
       </CacheProvider>
     );
   }

@@ -14,3 +14,18 @@ export const updateTheme = (theme) => ({
   type: TYPE.UPDATE_THEME,
   payload: theme,
 });
+
+export const updateUserStatus = (userStatus) => ({
+  type: TYPE.UPDATE_USER_STATUS,
+  payload: userStatus,
+});
+
+export const OpenModal = (modal) => ({
+  type: TYPE.OPEN_MODAL,
+  payload: modal,
+});
+
+export const CloseModal = {
+  type: TYPE.CLOSE_MODAL,
+  payload: {},
+};
