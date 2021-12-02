@@ -1,4 +1,5 @@
 import path from 'path';
+import svgToTinyDataUri from 'mini-svg-data-uri';
 
 export default {
   mode: process.env.NODE_ENV,
@@ -21,14 +22,33 @@ export default {
     rules: [
       {
         test: /\.svg$/,
-        use: [
-          {
-            loader: 'file-loader',
+        type: 'asset/inline',
+        use: {
+          loader: 'svgo-loader',
+          options: {
+            configFile: false,
+            plugins: [
+              { name: 'cleanupAttrs' },
+              { name: 'cleanupEnableBackground' },
+              {
+                name: 'removeAttrs',
+                params: {
+                  attrs: ['fill', 'height', 'width'],
+                },
+              },
+            ],
           },
-          {
-            loader: 'svgo-loader',
+        },
+        generator: {
+          dataUrl: (content) => {
+            content = content.toString();
+            const id = RegExp(
+              /id=((?<![\\])['"])((?:.(?!(?<![\\])\1))*.?)\1/gm
+            ).exec(content)[2];
+            const url = svgToTinyDataUri(content);
+            return { url, id };
           },
-        ],
+        },
       },
       {
         test: /\.js$/,

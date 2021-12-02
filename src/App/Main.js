@@ -72,7 +72,7 @@ class Main extends React.Component {
           this.props.OpenModal('Settings');
         }}
       >
-        <Icon icon={{ url: SettingsIcon, id: 'gear' }} />
+        <Icon icon={SettingsIcon} />
       </Button>
     );
   }
