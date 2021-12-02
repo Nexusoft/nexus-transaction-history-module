@@ -1,10 +1,12 @@
-import { useTable, useSortBy } from 'react-table';
+import { useTable, useSortBy, usePagination } from 'react-table';
 
 const {
   libraries: {
     React,
+    React: { useState, Fragment },
     emotion: { styled },
   },
+  components: { Button, Select },
 } = NEXUS;
 
 /*
@@ -52,65 +54,136 @@ const TBody = styled.tbody(({ theme }) => ({
 
 const THead = styled.thead(({ theme }) => ({}));
 
+const Pagination = styled.div(({ theme }) => ({
+  display: 'grid',
+  gridTemplateColumns: '25% 15% 25%',
+  justifyContent: 'space-between',
+}));
+
+const PageSelection = styled.div(({ theme }) => ({
+  marginLeft: 'auto',
+  marginRight: 'auto',
+}));
+
 function Table({ columns, data, defaultSortingColumnId, ...rest }) {
   // Use the state and functions returned from useTable to build your UI
   const defaultSort = [{ id: defaultSortingColumnId, desc: true }];
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable(
-      {
-        columns,
-        data,
-        initialState: {
-          sortBy: defaultSort,
-        },
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    pageOptions,
+    page,
+    state,
+    gotoPage,
+    previousPage,
+    nextPage,
+    setPageSize,
+    canPreviousPage,
+    canNextPage,
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: {
+        pageSize: 10,
+        sortBy: defaultSort,
       },
-      useSortBy
-    );
+    },
+    useSortBy,
+    usePagination
+  );
+  const availablePages = Array.apply(
+    null,
+    Array(Math.ceil(data.length / state.pageSize))
+  ).map((e, i) => ({
+    value: i,
+    display: i + 1,
+  }));
+  console.log(availablePages);
+
+  const [pageSelect, setPageSelect] = useState(0);
 
   // Render the UI for your table
   return (
-    <table {...getTableProps()}>
-      <THead>
-        {headerGroups.map((headerGroup) => (
-          <TR {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column) => (
-              <TH
-                {...column.getHeaderProps({
-                  ...column.getSortByToggleProps(),
-                  title: 'Sort',
-                  style: {
-                    cursor: 'pointer',
-                    width: column.width,
-                    maxWidth: column.maxWidth,
-                  },
-                })}
-              >
-                {column.render('Header')}
-                <span>
-                  {column.isSorted ? (column.isSortedDesc ? '▼' : '▲') : ''}
-                </span>
-              </TH>
-            ))}
-          </TR>
-        ))}
-      </THead>
-      <TBody {...getTableBodyProps()}>
-        {rows.map((row, index) => {
-          prepareRow(row);
-          return (
-            <TR {...row.getRowProps()}>
-              {row.cells.map((cell) => {
-                return (
-                  <TD {...cell.getCellProps()} {...{ index }}>
-                    {cell.render('Cell')}
-                  </TD>
-                );
-              })}
+    <Fragment>
+      <table {...getTableProps()}>
+        <THead>
+          {headerGroups.map((headerGroup) => (
+            <TR {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <TH
+                  {...column.getHeaderProps({
+                    ...column.getSortByToggleProps(),
+                    title: 'Sort',
+                    style: {
+                      cursor: 'pointer',
+                      width: column.width,
+                      maxWidth: column.maxWidth,
+                    },
+                  })}
+                >
+                  {column.render('Header')}
+                  <span>
+                    {column.isSorted ? (column.isSortedDesc ? '▼' : '▲') : ''}
+                  </span>
+                </TH>
+              ))}
             </TR>
-          );
-        })}
-      </TBody>
-    </table>
+          ))}
+        </THead>
+        <TBody {...getTableBodyProps()}>
+          {page.map((row, index) => {
+            prepareRow(row);
+            return (
+              <TR {...row.getRowProps()}>
+                {row.cells.map((cell) => {
+                  return (
+                    <TD {...cell.getCellProps()} {...{ index }}>
+                      {cell.render('Cell')}
+                    </TD>
+                  );
+                })}
+              </TR>
+            );
+          })}
+        </TBody>
+      </table>
+      <Pagination>
+        <Button
+          onClick={() => {
+            setPageSelect(pageSelect - 1);
+            previousPage();
+          }}
+          disabled={!canPreviousPage}
+        >
+          Previous
+        </Button>
+        <PageSelection>
+          <label>Page:</label>
+          <Select
+            style={{ paddingLeft: '1em', display: 'inline-flex' }}
+            value={pageSelect}
+            options={availablePages}
+            onChange={(e) => {
+              setPageSelect(e);
+              gotoPage(e);
+            }}
+          />
+        </PageSelection>
+        <Button
+          onClick={() => {
+            setPageSelect(pageSelect + 1);
+            nextPage();
+          }}
+          disabled={!canNextPage}
+        >
+          Next
+        </Button>
+      </Pagination>
+    </Fragment>
   );
 }
 
