@@ -25,7 +25,7 @@ export const OpenModal = (modal) => ({
   payload: modal,
 });
 
-export const CloseModal = {
+export const CloseModal = () => ({
   type: TYPE.CLOSE_MODAL,
   payload: {},
-};
+});

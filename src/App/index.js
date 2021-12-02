@@ -1,4 +1,6 @@
 import Main from './Main';
+import { CloseModal } from 'actions/actionCreators';
+import Settings from './Overview/Settings';
 
 const {
   libraries: {
@@ -18,15 +20,17 @@ const emotionCache = createCache({
   container: document.head,
 });
 
-const modalList = {};
+const modalList = {
+  Settings: Settings,
+};
 
 @connect(
   (state) => ({
     initialized: state.initialized,
     theme: state.theme,
-    PopUp: state.popUps,
+    modal: state.modal,
   }),
-  {}
+  { CloseModal }
 )
 class App extends React.Component {
   render() {
@@ -38,7 +42,7 @@ class App extends React.Component {
       <CacheProvider value={emotionCache}>
         <ThemeController theme={theme}>
           {Modal && (
-            <Modal {...modal.props} removeModal={() => dispatch(CloseModal)} />
+            <Modal {...modal.props} removeModal={this.props.CloseModal} />
           )}
           <Main history={history} />
         </ThemeController>

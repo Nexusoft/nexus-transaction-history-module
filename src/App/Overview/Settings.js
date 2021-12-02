@@ -1,7 +1,6 @@
 // External
 
 // Internal Global
-import { ClosePopUp } from 'Shared/Libraries/ui';
 import { RemoveSaveData, SetSettings } from 'Shared/Libraries/settings';
 
 const {
@@ -37,7 +36,6 @@ const Field = styled.div({
  * @extends {Component}
  */
 @connect((state) => ({ settings: state.settings }), {
-  ClosePopUp,
   SetSettings,
   RemoveSaveData,
 })
@@ -46,7 +44,9 @@ class Settings extends Component {
     const { SetSettings, RemoveSaveData } = this.props;
     return (
       <Modal
+        visible={true}
         removeModal={this.props.removeModal}
+        assignClose={(closeModal) => (this.closeModal = closeModal)}
         style={{
           width: '50%',
           maxHeight: '90%',

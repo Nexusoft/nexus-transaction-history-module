@@ -69,7 +69,7 @@ class Main extends React.Component {
     return (
       <Button
         onClick={() => {
-          this.props.OpenModal('Settings');
+          this.props.OpenModal({ name: 'Settings', props: {} });
         }}
       >
         <Icon icon={SettingsIcon} />
