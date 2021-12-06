@@ -179,6 +179,7 @@ class Overview extends React.Component {
               e.to ||
               (e.OP === 'FEE' && 'Fee Reserve') ||
               (e.O === 'TRUST' && 'Trust Reward'),
+            from: e.from || (e.OP === 'TRUST' && 'Trust Mint'),
             timestamp: history.transactions[e.txid].timestamp,
             fiatAmount: history.transactions[e.txid].fiat.totalValue,
 
