@@ -181,6 +181,7 @@ class Overview extends React.Component {
               (e.O === 'TRUST' && 'Trust Reward'),
             timestamp: history.transactions[e.txid].timestamp,
             fiatAmount: history.transactions[e.txid].fiat.totalValue,
+
           }
         : { OP: 'Loading' }
     );
