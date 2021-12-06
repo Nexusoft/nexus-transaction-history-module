@@ -22,7 +22,7 @@ const {
   },
 } = NEXUS;
 
-const columns = (locale) => [
+const columns = (locale, unixTime) => [
   {
     id: 'op',
     Header: 'Operation',
@@ -47,14 +47,16 @@ const columns = (locale) => [
     Header: 'Date Time',
     Cell: (cell) =>
       cell.value
-        ? Intl.DateTimeFormat(locale, {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric',
-          }).format(cell.value * 1000)
+        ? unixTime
+          ? cell.value
+          : Intl.DateTimeFormat(locale, {
+              year: 'numeric',
+              month: 'numeric',
+              day: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+              second: 'numeric',
+            }).format(cell.value * 1000)
         : '',
     accessor: 'timestamp',
   },
@@ -109,6 +111,8 @@ const mapStateToProps = (state) => {
     fromQuery,
     toQuery,
     timeSpan,
+    unixTime: state.settings.unixTime,
+    pageSize: state.settings.transactionsPerPage,
   };
 };
 
@@ -201,8 +205,9 @@ class Overview extends React.Component {
         </Header>
         <Table
           data={data}
-          columns={columns(this.props.settings.locale)}
+          columns={columns(this.props.settings.locale, this.props.unixTime)}
           defaultSortingColumnId={'timestamp'}
+          pageSize={this.props.pageSize}
           defaultPageSize={10}
         />
         <Footer>

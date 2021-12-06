@@ -2,6 +2,8 @@ import * as TYPE from 'actions/types';
 
 const initialState = {
   nexusApiLimit: 100,
+  transactionsPerPage: 10,
+  unixTime: false,
 };
 
 export default (state = initialState, action) => {

@@ -65,7 +65,7 @@ const PageSelection = styled.div(({ theme }) => ({
   marginRight: 'auto',
 }));
 
-function Table({ columns, data, defaultSortingColumnId, ...rest }) {
+function Table({ columns, data, defaultSortingColumnId, pageSize, ...rest }) {
   // Use the state and functions returned from useTable to build your UI
   const defaultSort = [{ id: defaultSortingColumnId, desc: true }];
   const {
@@ -88,7 +88,7 @@ function Table({ columns, data, defaultSortingColumnId, ...rest }) {
       columns,
       data,
       initialState: {
-        pageSize: 10,
+        pageSize: pageSize || 10,
         sortBy: defaultSort,
       },
     },
@@ -102,7 +102,6 @@ function Table({ columns, data, defaultSortingColumnId, ...rest }) {
     value: i,
     display: i + 1,
   }));
-  console.log(availablePages);
 
   const [pageSelect, setPageSelect] = useState(0);
 

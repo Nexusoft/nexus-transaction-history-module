@@ -72,9 +72,31 @@ class Settings extends Component {
                   min={100}
                   value={this.props.settings.nexusApiLimit}
                   onChange={(ele) =>
-                    SetSettings({ nexusApiLimit: ele.target.value })
+                    SetSettings({ nexusApiLimit: parseInt(ele.target.value) })
                   }
                 ></TextField>
+              </Field>
+              <Field>
+                <strong>{'Transactions Per Page'}</strong>
+                <TextField
+                  type={'number'}
+                  min={1}
+                  value={this.props.settings.transactionsPerPage}
+                  onChange={(ele) =>
+                    SetSettings({
+                      transactionsPerPage: parseInt(ele.target.value),
+                    })
+                  }
+                ></TextField>
+              </Field>
+              <Field>
+                <strong>{'Unix Time Display'}</strong>
+                <Switch
+                  checked={this.props.settings.unixTime}
+                  onChange={(ele) =>
+                    SetSettings({ unixTime: ele.target.checked })
+                  }
+                />
               </Field>
               <Field>
                 <strong>{'Delete Saved Data'}</strong>
