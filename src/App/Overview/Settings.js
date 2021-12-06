@@ -10,17 +10,7 @@ const {
     ReactRedux: { connect },
     emotion: { styled },
   },
-  components: {
-    Icon,
-    FieldSet,
-    Switch,
-    Modal,
-    Select,
-    DateTime,
-    TextField,
-    FormField,
-    Button,
-  },
+  components: { FieldSet, Switch, Modal, TextField, Button },
 } = NEXUS;
 
 const Field = styled.div({
@@ -41,7 +31,8 @@ const Field = styled.div({
 })
 class Settings extends Component {
   render() {
-    const { SetSettings, RemoveSaveData } = this.props;
+    const { settings, SetSettings, RemoveSaveData } = this.props;
+    const { nexusApiLimit, transactionsPerPage, unixTime } = settings;
     return (
       <Modal
         visible={true}
@@ -70,7 +61,7 @@ class Settings extends Component {
                 <TextField
                   type={'number'}
                   min={100}
-                  value={this.props.settings.nexusApiLimit}
+                  value={nexusApiLimit}
                   onChange={(ele) =>
                     SetSettings({ nexusApiLimit: parseInt(ele.target.value) })
                   }
@@ -81,7 +72,7 @@ class Settings extends Component {
                 <TextField
                   type={'number'}
                   min={1}
-                  value={this.props.settings.transactionsPerPage}
+                  value={transactionsPerPage}
                   onChange={(ele) =>
                     SetSettings({
                       transactionsPerPage: parseInt(ele.target.value),
@@ -92,7 +83,7 @@ class Settings extends Component {
               <Field>
                 <strong>{'Unix Time Display'}</strong>
                 <Switch
-                  checked={this.props.settings.unixTime}
+                  checked={unixTime}
                   onChange={(ele) =>
                     SetSettings({ unixTime: ele.target.checked })
                   }

@@ -65,7 +65,6 @@ class Main extends React.Component {
   }
 
   settingButton() {
-    console.dir(SettingsIcon);
     return (
       <Button
         onClick={() => {
@@ -82,12 +81,7 @@ class Main extends React.Component {
 
     return (
       <Panel
-        title={
-          <>
-            {'History Module'}{' '}
-            <a style={{ marginLeft: '.25em', fontSize: '10pt' }}>{'  BETA'}</a>{' '}
-          </>
-        }
+        title={<>{'History Module'}</>}
         icon={History}
         controls={
           <div

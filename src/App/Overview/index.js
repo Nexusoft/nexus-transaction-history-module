@@ -1,6 +1,8 @@
+// External
 import Table from './Table';
 import { CSVLink } from 'react-csv';
 
+// Internal
 import Filters from './Filters';
 import { GetUserAccounts, GetAccountTransactions } from 'Shared/Libraries/user';
 import { getTransactionDataPacket } from 'Shared/Libraries/transactions';
@@ -12,14 +14,7 @@ const {
     ReactRedux: { connect },
     emotion: { styled },
   },
-  components: { GlobalStyles, Panel, Switch, Tooltip, TextField, Button },
-  utilities: {
-    confirm,
-    rpcCall,
-    onceRpcReturn,
-    showErrorDialog,
-    showSuccessDialog,
-  },
+  components: { Tooltip },
 } = NEXUS;
 
 const columns = (locale, unixTime) => [
@@ -98,24 +93,28 @@ const Header = styled.div({});
 const Footer = styled.div({});
 
 const mapStateToProps = (state) => {
-  const userInfo = state.user.info;
   const { operation, fromQuery, toQuery, timeSpan } = state.ui;
+  const { unixTime, transactionsPerPage, locale, nexusApiLimit } =
+    state.settings;
+  const { transactions, info, accounts } = state.user;
+  const { history } = state;
+  const txTotal = info && state.user.info.transactions;
   return {
-    accounts: state.user.accounts,
-    settings: state.settings,
-    userInfo: userInfo,
-    history: state.history,
-    transactions: state.user.transactions,
-    txTotal: userInfo && state.user.info.transactions,
+    accounts,
+    userInfo: info,
+    history,
+    transactions,
+    txTotal,
     operation,
     fromQuery,
     toQuery,
     timeSpan,
-    unixTime: state.settings.unixTime,
-    pageSize: state.settings.transactionsPerPage,
+    unixTime,
+    pageSize: transactionsPerPage,
+    locale,
+    nexusApiLimit,
   };
 };
-
 const mapDispatchToProps = {
   GetUserAccounts,
   GetAccountTransactions,
@@ -128,38 +127,36 @@ class Overview extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!this.props.userInfo || !prevProps.userInfo) {
+    const {
+      userInfo,
+      nexusApiLimit,
+      accounts,
+      transactions,
+      txTotal,
+      GetAccountTransactions,
+      GetUserAccounts,
+    } = this.props;
+
+    if (!userInfo || !prevProps.userInfo) {
       //Not Logged in
       return;
     }
 
     //TODO: Redo all of this
-    if (this.props.accounts && prevProps.accounts != this.props.accounts) {
-      this.props.GetAccountTransactions(
-        this.props.accounts,
-        this.props.settings.nexusApiLimit
-      );
+    if (accounts && prevProps.accounts != accounts) {
+      GetAccountTransactions(accounts, nexusApiLimit);
     }
 
-    if (
-      this.props.transactions &&
-      prevProps.transactions != this.props.transactions
-    ) {
+    if (transactions && prevProps.transactions != transactions) {
       this.getTransactionHistory();
     }
 
-    if (this.props.txTotal && this.props.txTotal != prevProps.txTotal) {
-      this.props.GetUserAccounts();
-      this.props.GetAccountTransactions(
-        this.props.accounts,
-        this.props.settings.nexusApiLimit
-      );
+    if (txTotal && txTotal != prevProps.txTotal) {
+      GetUserAccounts();
+      GetAccountTransactions(accounts, nexusApiLimit);
     }
-    if (this.props.txTotal !== 0 && !this.props.transactions) {
-      this.props.GetAccountTransactions(
-        this.props.accounts,
-        this.props.settings.nexusApiLimit
-      );
+    if (txTotal !== 0 && !transactions) {
+      GetAccountTransactions(accounts, nexusApiLimit);
     }
   }
 
@@ -172,25 +169,33 @@ class Overview extends React.Component {
   }
 
   transformTransactionData() {
-    const { transactions } = this.props;
+    const { transactions, history } = this.props;
     if (!transactions) return [];
     return transactions.map((e) =>
-      this.props.history.transactions[e.txid]
+      history.transactions[e.txid]
         ? {
             ...e,
             to:
               e.to ||
               (e.OP === 'FEE' && 'Fee Reserve') ||
               (e.O === 'TRUST' && 'Trust Reward'),
-            timestamp: this.props.history.transactions[e.txid].timestamp,
-            fiatAmount: this.props.history.transactions[e.txid].fiat.totalValue,
+            timestamp: history.transactions[e.txid].timestamp,
+            fiatAmount: history.transactions[e.txid].fiat.totalValue,
           }
         : { OP: 'Loading' }
     );
   }
 
   render() {
-    const { fromQuery, toQuery, timeSpan, operation } = this.props;
+    const {
+      fromQuery,
+      toQuery,
+      timeSpan,
+      operation,
+      locale,
+      unixTime,
+      pageSize,
+    } = this.props;
     const data = GetFilteredTransactions(
       this.transformTransactionData(),
       fromQuery,
@@ -205,9 +210,9 @@ class Overview extends React.Component {
         </Header>
         <Table
           data={data}
-          columns={columns(this.props.settings.locale, this.props.unixTime)}
+          columns={columns(locale, unixTime)}
           defaultSortingColumnId={'timestamp'}
-          pageSize={this.props.pageSize}
+          pageSize={pageSize}
           defaultPageSize={10}
         />
         <Footer>

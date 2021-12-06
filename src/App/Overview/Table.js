@@ -9,29 +9,6 @@ const {
   components: { Button, Select },
 } = NEXUS;
 
-/*
-const Table = ({ data, columns, defaultSortingColumnIndex, ...rest }) => (
-  <ReactTable
-    noDataText={'No Rows Found'}
-    minRows={5}
-    PropTypes={PropTypes}
-    data={data}
-    pageText={'Page'}
-    columns={columns}
-    defaultSorted={[{ ...columns[defaultSortingColumnIndex], desc: true }]}
-    rowsText={'rows'}
-    previousText={'< ' + 'Previous'}
-    getTbodyProps={() => {
-      return { style: { overflow: 'hidden' } };
-    }}
-    nextText={'Next' + ' >'}
-    {...rest}
-    className={`-striped -highlight ${rest.className}`}
-  />
-);
-
-*/
-
 const TD = styled.td(({ theme, index }) => ({
   padding: '0 0 0 0',
   fontSize: '75%',
@@ -66,7 +43,6 @@ const PageSelection = styled.div(({ theme }) => ({
 }));
 
 function Table({ columns, data, defaultSortingColumnId, pageSize, ...rest }) {
-  // Use the state and functions returned from useTable to build your UI
   const defaultSort = [{ id: defaultSortingColumnId, desc: true }];
   const {
     getTableProps,
