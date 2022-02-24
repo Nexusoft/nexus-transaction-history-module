@@ -20,6 +20,7 @@ export default {
     modules: [path.join(process.cwd(), 'src/shared'), 'node_modules'],
     alias: {
       react$: path.resolve(__dirname, 'src/react.js'),
+      'react-dom': path.resolve(__dirname, 'src/reactDom.js'),
     },
   },
 };

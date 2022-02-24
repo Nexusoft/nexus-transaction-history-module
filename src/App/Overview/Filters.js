@@ -5,10 +5,11 @@ import {
   setOperation,
 } from 'Shared/Libraries/ui';
 
+import { connect } from 'react-redux';
+
 const {
   libraries: {
     React,
-    ReactRedux: { connect },
     emotion: { styled },
   },
   components: { Select, TextField, FormField },

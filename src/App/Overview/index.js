@@ -1,6 +1,7 @@
 // External
 import Table from './Table';
 import { CSVLink } from 'react-csv';
+import { connect } from 'react-redux';
 
 // Internal
 import Filters from './Filters';
@@ -11,7 +12,6 @@ import { GetFilteredTransactions } from './selectors';
 const {
   libraries: {
     React,
-    ReactRedux: { connect },
     emotion: { styled },
   },
   components: { Tooltip },
@@ -178,11 +178,10 @@ class Overview extends React.Component {
             to:
               e.to ||
               (e.OP === 'FEE' && 'Fee Reserve') ||
-              (e.O === 'TRUST' && 'Trust Reward'),
+              (e.OP === 'TRUST' && 'Trust Reward'),
             from: e.from || (e.OP === 'TRUST' && 'Trust Mint'),
             timestamp: history.transactions[e.txid].timestamp,
             fiatAmount: history.transactions[e.txid].fiat.totalValue,
-
           }
         : { OP: 'Loading' }
     );

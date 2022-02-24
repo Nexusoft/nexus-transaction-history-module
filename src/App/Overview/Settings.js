@@ -1,4 +1,5 @@
 // External
+import { connect } from 'react-redux';
 
 // Internal Global
 import { RemoveSaveData, SetSettings } from 'Shared/Libraries/settings';
@@ -7,7 +8,6 @@ const {
   libraries: {
     React,
     React: { Component },
-    ReactRedux: { connect },
     emotion: { styled },
   },
   components: { FieldSet, Switch, Modal, TextField, Button },

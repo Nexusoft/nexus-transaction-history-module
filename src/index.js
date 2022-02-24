@@ -6,38 +6,24 @@ import {
   updateTheme,
   updateUserStatus,
 } from './actions/actionCreators';
+import { Provider } from 'react-redux';
 
 const store = configureStore();
 
 const {
-  libraries: {
-    React,
-    ReactDOM,
-    ReactRedux: { Provider },
-  },
-  utilities: {
-    onceInitialize,
-    onCoreInfoUpdated,
-    onThemeUpdated,
-    onUserStatusUpdated,
-  },
+  libraries: { React, ReactDOM },
+  utilities: { onceInitialize, onWalletDataUpdated },
 } = NEXUS;
 
 onceInitialize((data) => {
   store.dispatch(initialize(data));
 });
 
-onCoreInfoUpdated((coreInfo) => {
-  store.dispatch(updateCoreInfo(coreInfo));
-});
-
-onThemeUpdated((theme) => {
-  store.dispatch(updateTheme(theme));
-});
-
-onUserStatusUpdated((userStatus) => {
+onWalletDataUpdated(({ coreInfo, theme, userStatus }) => {
+  if (coreInfo) store.dispatch(updateCoreInfo(coreInfo));
+  if (theme) store.dispatch(updateTheme(theme));
   //if null == not logged in
-  store.dispatch(updateUserStatus(userStatus));
+  if (userStatus) store.dispatch(updateUserStatus(userStatus));
 });
 
 ReactDOM.render(

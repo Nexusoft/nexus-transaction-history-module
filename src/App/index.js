@@ -1,21 +1,21 @@
 import Main from './Main';
 import { CloseModal } from 'actions/actionCreators';
 import Settings from './Overview/Settings';
+import { connect } from 'react-redux';
 
 const {
   libraries: {
     React,
-    ReactRedux: { connect },
     emotion: {
-      createCache,
-      core: { CacheProvider },
+      cache,
+      react: { CacheProvider },
     },
   },
   utilities: { color },
   components: { ThemeController },
 } = NEXUS;
 
-const emotionCache = createCache({
+const emotionCache = cache({
   key: 'nexus-history-module',
   container: document.head,
 });

@@ -2,12 +2,7 @@ import createReducer from './reducers';
 import storageMiddleware from 'middlewares/storageMiddleware';
 import stateMiddleware from 'middlewares/stateMiddleware';
 import thunk from 'redux-thunk';
-
-const {
-  libraries: {
-    Redux: { createStore, compose, applyMiddleware },
-  },
-} = NEXUS;
+import { createStore, compose, applyMiddleware } from 'redux';
 
 export default function configureStore() {
   const middlewares = [

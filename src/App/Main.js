@@ -8,16 +8,17 @@ import Spin from 'Shared/Images/recovery.svg';
 import Download from 'Shared/Images/download.svg';
 import SettingsIcon from 'Shared/Images/gear.svg';
 
+import { connect } from 'react-redux';
+
 const {
   libraries: {
     React,
-    ReactRedux: { connect },
-    emotion: { styled, core },
+    emotion: { styled, react },
   },
   components: { GlobalStyles, Panel, Button, Icon },
 } = NEXUS;
 
-const spin = core.keyframes`
+const spin = react.keyframes`
   from { transform:rotate(360deg); }
     to { transform:rotate(0deg); }
 `;
