@@ -3,69 +3,54 @@ const {
   utilities: { apiCall, proxyRequest },
 } = NEXUS;
 
-export const getTransactionDataPacket = (
-  transactions,
-  timestamp,
-  fiat
-) => async (dispatch, getState) => {
-  //console.log('gettransctionsDataPacekets');
-  dispatch({ type: TYPE.SET_GATHERING_INFO, payload: true });
-  try {
-    //console.log('aadsd');
-    asyncForEach(
-      transactions,
-      dispatch,
-      getState,
-      async (tx, {}, {}) => {
-        //console.log(tx);
-        const txID = tx.txid;
-        //console.log('gettransctionDataPaceket');
-        const past = getState().history.transactions[txID];
-        if (past) {
-          return;
-        }
-        const txInfo = await getTransactionMoreInfo(txID);
-        //console.log(txInfo);
-        //console.log(dispatch);
-        //console.log(getState);
-        const historyInfo = await getHistoricInfo(
-          txInfo.timestamp,
-          fiat,
-          dispatch,
-          getState
-        );
-        //console.log(historyInfo);
-        //console.log(historyInfo[txInfo.timestamp]);
-        //console.log(historyInfo[txInfo.timestamp][fiat]);
-        const waitTwoSeconds = await delay(2000);
-        //console.log(waitTwoSeconds);
-        let dataPacket = {};
-        dataPacket[txID] = {
-          timestamp: txInfo.timestamp,
-          fiat: {
-            unitPrice: historyInfo[txInfo.timestamp][fiat].unitPrice,
-            totalValue:
-              historyInfo[txInfo.timestamp][fiat].unitPrice * tx.amount,
-          },
-        };
+export const getTransactionDataPacket =
+  (transactions, timestamp, fiat) => async (dispatch, getState) => {
+    dispatch({ type: TYPE.SET_GATHERING_INFO, payload: true });
+    try {
+      asyncForEach(
+        transactions,
+        dispatch,
+        getState,
+        async (tx, {}, {}) => {
+          const txID = tx.txid;
+          const past = getState().history.transactions[txID];
+          if (past) {
+            return;
+          }
+          const txInfo = await getTransactionMoreInfo(txID);
+          const historyInfo = await getHistoricInfo(
+            txInfo.timestamp,
+            fiat,
+            dispatch,
+            getState
+          );
+          const waitTwoSeconds = await delay(2000);
+          let dataPacket = {};
+          dataPacket[txID] = {
+            timestamp: txInfo.timestamp,
+            fiat: {
+              unitPrice: historyInfo[txInfo.timestamp][fiat].unitPrice,
+              totalValue:
+                historyInfo[txInfo.timestamp][fiat].unitPrice * tx.amount,
+            },
+          };
 
-        dispatch({
-          type: TYPE.ADD_TRANSACTION_DATAPACKET,
-          payload: dataPacket,
-        });
-      },
-      () => {
-        dispatch({ type: TYPE.SET_GATHERING_INFO, payload: false });
-        //console.log('Completed');
-      }
-    );
-  } catch (error) {
-    console.error(error);
-  }
-};
+          dispatch({
+            type: TYPE.ADD_TRANSACTION_DATAPACKET,
+            payload: dataPacket,
+          });
+        },
+        () => {
+          dispatch({ type: TYPE.SET_GATHERING_INFO, payload: false });
+          //console.log('Completed');
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
 async function asyncForEach(array, dispatch, getState, callback, onComplete) {
-  //console.log(callback);
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array, dispatch, getState);
   }
@@ -88,16 +73,10 @@ async function getTransactionMoreInfo(txID) {
 async function getHistoricInfo(timestamp, fiat, dispatch, getState) {
   try {
     //check store for previous price
-    //const result = await getURL('url');
     const result = await proxyRequest(
       `https://min-api.cryptocompare.com/data/pricehistorical?fsym=NXS&tsyms=USD&ts=${timestamp}`,
       {}
     );
-    //console.log(result.data.NXS.USD);
-    //console.log(fiat);
-    //console.log(timestamp);
-    //console.log(getState);
-
     let dataPacket = {};
     dataPacket[timestamp] = {};
     dataPacket[timestamp][fiat] = {
