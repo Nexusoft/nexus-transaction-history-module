@@ -1,5 +1,6 @@
 // External
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 // Internal Global
 import { RemoveSaveData, SetSettings } from 'Shared/Libraries/settings';
@@ -18,6 +19,13 @@ const Field = styled.div({
   flexDirection: 'row',
   justifyContent: 'space-between',
 });
+
+const CCLink = styled.a(({ theme }) => ({
+  color: theme.primary,
+  fontSize: '75%',
+  opacity: '50%',
+  textDecoration: 'underline',
+}));
 
 /**
  * The Internal Send Form in the Send Page
@@ -99,6 +107,9 @@ class Settings extends Component {
                 </Button>
               </Field>
             </div>
+            <CCLink href="https://cryptocompare.com">
+              Powered by cryptocompare.com
+            </CCLink>
           </FieldSet>
         </Modal.Body>
         <Modal.Footer style={{ display: 'grid', paddingTop: 0 }}>
