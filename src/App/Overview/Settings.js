@@ -1,6 +1,5 @@
 // External
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 
 // Internal Global
 import { RemoveSaveData, SetSettings } from 'Shared/Libraries/settings';

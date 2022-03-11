@@ -5,6 +5,7 @@
 - **Minimum requirements** Nexus Interface 3.1.0
 - Added Unix Time Switch
 - Rehauled Table, txids now truncate for easier display
+- Corrected attribute to Crypto Compare
 
 ## v0.8.2
 

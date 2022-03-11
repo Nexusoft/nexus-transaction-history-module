@@ -5,3 +5,7 @@ A simple module that gathers historic fiat values for nexus transactions and pro
 ## Nexus Requirments
 
 - **Minimum Version:** 3.1.0
+
+## Credits
+
+Data provided by [Crypto Compare](https://cryptocompare.com)
