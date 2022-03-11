@@ -20,11 +20,11 @@
     "babel-plugin-transform-react-pure-class-to-function": "^1.0.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "cross-env": "^7.0.2",
+    "mini-svg-data-uri": "^1.4.3",
+    "svgo-loader": "^3.0.0",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.0",
-    "webpack-dev-server": "^4.5.0",
-    "svgo-loader": "^3.0.0",
-    "mini-svg-data-uri": "^1.4.3"
+    "webpack-dev-server": "^4.7.4"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.babel.js",
