@@ -1,5 +1,5 @@
 {
-  "name": "nexus_interface_history_module",
+  "name": "nexus_transaction_history_module",
   "version": "1.0.0",
   "description": "Loads and Saves fiat history data for your Nexus Account",
   "devDependencies": {

@@ -2,6 +2,7 @@
 
 ## v1.0.0
 
+- **Renamed to Nexus Transaction History Module**
 - **Minimum requirements** Nexus Interface 3.1.0
 - Added Unix Time Switch
 - Rehauled Table, txids now truncate for easier display

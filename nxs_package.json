@@ -1,6 +1,6 @@
 {
-  "name": "nexus_interface_history_module",
-  "displayName": "History Module",
+  "name": "nexus_transaction_history_module",
+  "displayName": "Transaction History Module",
   "version": "1.0.0",
   "targetWalletVersion": "3.1.0",
   "description": "Loads and Saves history data for your Nexus Account",
