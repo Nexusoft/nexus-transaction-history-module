@@ -21,7 +21,7 @@ const SpinIcon = styled(Icon)(({ spinning }) => {
 });
 
 export default function Main() {
-  const isLoggedIn = useSelector((state) => state.ui.user?.info);
+  const isLoggedIn = useSelector((state) => !!state.nexus.userStatus);
   const isBusy = useSelector(
     (state) => state.ui.main.busyGatheringInfo || !state.ui.user.transactions
   );
