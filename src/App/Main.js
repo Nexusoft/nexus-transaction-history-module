@@ -1,5 +1,10 @@
+import { useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import styled from '@emotion/styled';
+import { keyframes } from '@emotion/react';
+import { Panel, Button, Icon } from 'nexus-module';
+
 import { GetUserAccounts } from 'Shared/Libraries/user';
-import { SetBusyGatheringInfo } from 'Shared/Libraries/ui';
 import { OpenModal } from 'actions/actionCreators';
 
 import Overview from './Overview';
@@ -8,17 +13,7 @@ import Spin from 'Shared/Images/recovery.svg';
 import Download from 'Shared/Images/download.svg';
 import SettingsIcon from 'Shared/Images/gear.svg';
 
-import { connect } from 'react-redux';
-
-const {
-  libraries: {
-    React,
-    emotion: { styled, react },
-  },
-  components: { GlobalStyles, Panel, Button, Icon },
-} = NEXUS;
-
-const spin = react.keyframes`
+const spin = keyframes`
   from { transform:rotate(360deg); }
     to { transform:rotate(0deg); }
 `;
@@ -29,83 +24,70 @@ const SpinIcon = styled(Icon)(({ spinning }) => {
   };
 });
 
-@connect(
-  (state) => ({
-    isLoggedIn: state.user.info,
-    isBusy: state.ui.busyGatheringInfo || !state.user.transactions,
-  }),
-  { OpenModal, GetUserAccounts, SetBusyGatheringInfo }
-)
-class Main extends React.Component {
-  componentDidMount() {
-    this.props.GetUserAccounts();
-  }
+export default function Main() {
+  const isLoggedIn = useSelector((state) => state.ui.user.info);
+  const isBusy = useSelector(
+    (state) => state.ui.main.busyGatheringInfo || !state.ui.user.transactions
+  );
+  const childRef = useRef();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(GetUserAccounts());
+  }, []);
 
-  refreshButton(isActive) {
-    const { isBusy } = this.props;
-    return (
-      <Button
-        onClick={() => {}}
-        disabled={!isActive || isBusy}
-        icon={!isBusy ? Spin : Download}
-      >
-        {' '}
-        <SpinIcon icon={isBusy ? Spin : Download} spinning={isBusy} />
-        {isBusy ? (
-          'Gathering Data'
-        ) : (
-          <a
-            download={'NEXUS_HISTORY_DATA.csv'}
-            href={this.child.refs.csvLink.link}
-          >
-            Download CSV
-          </a>
-        )}
-      </Button>
-    );
-  }
+  const refreshButton = (isActive) => (
+    <Button
+      onClick={() => {}}
+      disabled={!isActive || isBusy}
+      icon={!isBusy ? Spin : Download}
+    >
+      {' '}
+      <SpinIcon icon={isBusy ? Spin : Download} spinning={isBusy} />
+      {isBusy ? (
+        'Gathering Data'
+      ) : (
+        <a
+          download={'NEXUS_HISTORY_DATA.csv'}
+          href={childRef.current?.refs.csvLink.link}
+        >
+          Download CSV
+        </a>
+      )}
+    </Button>
+  );
 
-  settingButton() {
-    return (
-      <Button
-        onClick={() => {
-          this.props.OpenModal({ name: 'Settings', props: {} });
-        }}
-      >
-        <Icon icon={SettingsIcon} />
-      </Button>
-    );
-  }
+  const settingButton = () => (
+    <Button
+      onClick={() => {
+        dispatch(OpenModal({ name: 'Settings', props: {} }));
+      }}
+    >
+      <Icon icon={SettingsIcon} />
+    </Button>
+  );
 
-  render() {
-    const { isLoggedIn } = this.props;
-
-    return (
-      <Panel
-        title={<>{'History Module'}</>}
-        icon={History}
-        controls={
-          <div
-            style={{
-              display: 'grid',
-              gridAutoFlow: 'column',
-              columnGap: '1em',
-            }}
-          >
-            {this.refreshButton(isLoggedIn && this.child && this.child.refs)}
-            {this.settingButton()}
-          </div>
-        }
-      >
-        <GlobalStyles />
-        {isLoggedIn ? (
-          <Overview childRef={(ref) => (this.child = ref)} />
-        ) : (
-          <div>Please Log In!</div>
-        )}
-      </Panel>
-    );
-  }
+  return (
+    <Panel
+      title={<>{'History Module'}</>}
+      icon={History}
+      controls={
+        <div
+          style={{
+            display: 'grid',
+            gridAutoFlow: 'column',
+            columnGap: '1em',
+          }}
+        >
+          {refreshButton(isLoggedIn && childRef.current?.refs)}
+          {settingButton()}
+        </div>
+      }
+    >
+      {isLoggedIn ? (
+        <Overview childRef={(ref) => (childRef.current = ref)} />
+      ) : (
+        <div>Please Log In!</div>
+      )}
+    </Panel>
+  );
 }
-
-export default Main;

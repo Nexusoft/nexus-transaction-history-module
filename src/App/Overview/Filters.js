@@ -115,7 +115,9 @@ const Filters = ({
 );
 
 const mapStateToProps = ({
-  ui: { operation, fromQuery, toQuery, timeSpan },
+  ui: {
+    main: { operation, fromQuery, toQuery, timeSpan },
+  },
 }) => ({
   operation,
   fromQuery,

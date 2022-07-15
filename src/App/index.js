@@ -1,54 +1,33 @@
-import Main from './Main';
+import { useSelector, useDispatch } from 'react-redux';
+import { ModuleWrapper } from 'nexus-module';
+
 import { CloseModal } from 'actions/actionCreators';
+
+import Main from './Main';
 import Settings from './Overview/Settings';
-import { connect } from 'react-redux';
-
-const {
-  libraries: {
-    React,
-    emotion: {
-      cache,
-      react: { CacheProvider },
-    },
-  },
-  utilities: { color },
-  components: { ThemeController },
-} = NEXUS;
-
-const emotionCache = cache({
-  key: 'nexus-history-module',
-  container: document.head,
-});
 
 const modalList = {
   Settings: Settings,
 };
 
-@connect(
-  (state) => ({
-    initialized: state.initialized,
-    theme: state.theme,
-    modal: state.modal,
-  }),
-  { CloseModal }
-)
-class App extends React.Component {
-  render() {
-    const { initialized, theme, modal } = this.props;
-    if (!initialized) return null;
-    const Modal = modal && modalList[modal.name];
+export default function App() {
+  const initialized = useSelector((state) => state.nexus.initialized);
+  const theme = useSelector((state) => state.nexus.theme);
+  const modal = useSelector((state) => state.ui.modal);
+  const Modal = modal && modalList[modal.name];
+  const dispatch = useDispatch();
 
-    return (
-      <CacheProvider value={emotionCache}>
-        <ThemeController theme={theme}>
-          {Modal && (
-            <Modal {...modal.props} removeModal={this.props.CloseModal} />
-          )}
-          <Main history={history} />
-        </ThemeController>
-      </CacheProvider>
-    );
-  }
+  return (
+    <ModuleWrapper initialized={initialized} theme={theme}>
+      {Modal && (
+        <Modal
+          {...modal.props}
+          removeModal={() => {
+            dispatch(CloseModal());
+          }}
+        />
+      )}
+      <Main />
+    </ModuleWrapper>
+  );
 }
-
-export default App;

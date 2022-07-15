@@ -1,5 +1,6 @@
 import path from 'path';
 import svgToTinyDataUri from 'mini-svg-data-uri';
+import { webpackAliases } from 'nexus-module';
 
 export default {
   mode: process.env.NODE_ENV,
@@ -10,15 +11,6 @@ export default {
     filename: 'app.js',
   },
   target: 'web',
-  resolve: {
-    extensions: ['.js', '.jsx', '.json'],
-    modules: [path.join(process.cwd(), 'src/shared'), 'node_modules'],
-    alias: {
-      // because victory library requires react
-      react$: path.resolve(__dirname, 'src/react.js'),
-      'react-dom': path.resolve(__dirname, 'src/reactDom.js'),
-    },
-  },
   module: {
     rules: [
       {
@@ -40,16 +32,18 @@ export default {
             ],
           },
         },
-        generator: {
-          dataUrl: (content) => {
-            content = content.toString();
-            const id = RegExp(
-              /id=((?<![\\])['"])((?:.(?!(?<![\\])\1))*.?)\1/gm
-            ).exec(content)[2];
-            const url = svgToTinyDataUri(content);
-            return { url, id };
-          },
-        },
+        // generator: {
+        //   dataUrl: (content) => {
+        //     console.log('|||', typeof content, content);
+        //     content = content.toString();
+        //     const id = RegExp(
+        //       /id=((?<![\\])['"])((?:.(?!(?<![\\])\1))*.?)\1/gm
+        //     ).exec(content)[2];
+        //     const url = svgToTinyDataUri(content);
+        //     console.log(url, id, '\n\n');
+        //     return { url, id };
+        //   },
+        // },
       },
       {
         test: /\.js$/,
@@ -62,5 +56,11 @@ export default {
         },
       },
     ],
+  },
+  resolve: {
+    alias: webpackAliases,
+  },
+  stats: {
+    errorDetails: true,
   },
 };

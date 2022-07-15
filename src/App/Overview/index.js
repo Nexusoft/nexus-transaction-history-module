@@ -93,12 +93,12 @@ const Header = styled.div({});
 const Footer = styled.div({});
 
 const mapStateToProps = (state) => {
-  const { operation, fromQuery, toQuery, timeSpan } = state.ui;
+  const { operation, fromQuery, toQuery, timeSpan } = state.ui.main;
   const { unixTime, transactionsPerPage, locale, nexusApiLimit } =
     state.settings;
-  const { transactions, info, accounts } = state.user;
-  const { history } = state;
-  const txTotal = info && state.user.info.transactions;
+  const { transactions, info, accounts } = state.ui.user;
+  const { history } = state.ui;
+  const txTotal = info && state.ui.user.info.transactions;
   return {
     accounts,
     userInfo: info,

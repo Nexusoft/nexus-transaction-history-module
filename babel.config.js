@@ -1,3 +1,5 @@
+const browserslistQuery = require('nexus-module').browserslistQuery;
+
 const reactOptimizePreset = [
   '@babel/plugin-transform-react-constant-elements',
   '@babel/plugin-transform-react-inline-elements',
@@ -15,15 +17,8 @@ module.exports = function (api) {
 
   return {
     presets: [
-      [
-        '@babel/preset-env',
-        {
-          targets: { electron: '12.0.5' },
-          corejs: '3',
-          useBuiltIns: 'usage',
-        },
-      ],
-      ['@babel/preset-react', { development }],
+      ['@babel/preset-env', { targets: browserslistQuery }],
+      ['@babel/preset-react', { development, runtime: 'automatic' }],
     ],
     plugins: [
       [
@@ -32,11 +27,7 @@ module.exports = function (api) {
           root: ['./src/'],
         },
       ],
-      '@babel/plugin-proposal-export-default-from',
-      '@babel/plugin-proposal-do-expressions',
-      ['@babel/plugin-proposal-decorators', { legacy: true }],
-      '@babel/plugin-proposal-export-namespace-from',
-      ['@babel/plugin-proposal-class-properties', { loose: true }],
+      ['@babel/plugin-proposal-optional-chaining', { loose: false }],
       ...(development ? devPlugins : prodPlugins),
     ],
   };
