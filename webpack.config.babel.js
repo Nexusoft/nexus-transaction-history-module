@@ -1,5 +1,4 @@
 import path from 'path';
-import svgToTinyDataUri from 'mini-svg-data-uri';
 import { webpackAliases } from 'nexus-module';
 
 export default {
