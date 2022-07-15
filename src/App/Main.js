@@ -8,10 +8,6 @@ import { GetUserAccounts } from 'Shared/Libraries/user';
 import { OpenModal } from 'actions/actionCreators';
 
 import Overview from './Overview';
-import History from 'Shared/Images/History.svg';
-import Spin from 'Shared/Images/recovery.svg';
-import Download from 'Shared/Images/download.svg';
-import SettingsIcon from 'Shared/Images/gear.svg';
 
 const spin = keyframes`
   from { transform:rotate(360deg); }
@@ -25,7 +21,7 @@ const SpinIcon = styled(Icon)(({ spinning }) => {
 });
 
 export default function Main() {
-  const isLoggedIn = useSelector((state) => state.ui.user.info);
+  const isLoggedIn = useSelector((state) => state.ui.user?.info);
   const isBusy = useSelector(
     (state) => state.ui.main.busyGatheringInfo || !state.ui.user.transactions
   );
@@ -39,10 +35,19 @@ export default function Main() {
     <Button
       onClick={() => {}}
       disabled={!isActive || isBusy}
-      icon={!isBusy ? Spin : Download}
+      icon={{
+        url: !isBusy ? 'icons/recovery.svg' : 'icons/download.svg',
+        id: 'icon',
+      }}
     >
       {' '}
-      <SpinIcon icon={isBusy ? Spin : Download} spinning={isBusy} />
+      <SpinIcon
+        icon={{
+          url: isBusy ? 'icons/recovery.svg' : 'icons/download.svg',
+          id: 'icon',
+        }}
+        spinning={isBusy}
+      />
       {isBusy ? (
         'Gathering Data'
       ) : (
@@ -62,14 +67,14 @@ export default function Main() {
         dispatch(OpenModal({ name: 'Settings', props: {} }));
       }}
     >
-      <Icon icon={SettingsIcon} />
+      <Icon icon={{ url: 'icons/gear.svg', id: 'icon' }} />
     </Button>
   );
 
   return (
     <Panel
       title={<>{'History Module'}</>}
-      icon={History}
+      icon={{ url: 'icons/History.svg', id: 'icon' }}
       controls={
         <div
           style={{
