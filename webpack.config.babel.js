@@ -14,38 +14,6 @@ export default {
   module: {
     rules: [
       {
-        test: /\.svg$/,
-        type: 'asset/inline',
-        use: {
-          loader: 'svgo-loader',
-          options: {
-            configFile: false,
-            plugins: [
-              { name: 'cleanupAttrs' },
-              { name: 'cleanupEnableBackground' },
-              {
-                name: 'removeAttrs',
-                params: {
-                  attrs: ['fill', 'height', 'width'],
-                },
-              },
-            ],
-          },
-        },
-        // generator: {
-        //   dataUrl: (content) => {
-        //     console.log('|||', typeof content, content);
-        //     content = content.toString();
-        //     const id = RegExp(
-        //       /id=((?<![\\])['"])((?:.(?!(?<![\\])\1))*.?)\1/gm
-        //     ).exec(content)[2];
-        //     const url = svgToTinyDataUri(content);
-        //     console.log(url, id, '\n\n');
-        //     return { url, id };
-        //   },
-        // },
-      },
-      {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
