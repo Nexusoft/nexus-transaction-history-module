@@ -11,7 +11,11 @@
     "dist/index.html",
     "dist/History.svg",
     "dist/icon.svg",
-    "dist/js/app.js"
+    "dist/js/app.js",
+    "dist/icons/download.svg",
+    "dist/icons/gear.svg",
+    "dist/icons/History.svg",
+    "dist/icons/recovery.svg"
   ],
   "author": {
     "name": "Kendal Cormany",
