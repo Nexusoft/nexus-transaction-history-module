@@ -11,8 +11,6 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case TYPE.INITIALIZE:
-      return { ...initialState, ...action.payload.storageData.history };
     case TYPE.ADD_TRANSACTION_DATAPACKET:
       const newTransactions = {
         ...state,
