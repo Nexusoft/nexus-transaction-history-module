@@ -47,6 +47,7 @@ export default function Main() {
           id: 'icon',
         }}
         spinning={isBusy}
+        className="mr0_4"
       />
       {isBusy ? (
         'Gathering Data'
