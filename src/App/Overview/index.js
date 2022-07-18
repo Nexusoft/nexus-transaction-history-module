@@ -1,21 +1,16 @@
 // External
+import { Component } from 'react';
 import Table from './Table';
 import { CSVLink } from 'react-csv';
 import { connect } from 'react-redux';
+import styled from '@emotion/styled';
+import { Tooltip } from 'nexus-module';
 
 // Internal
 import Filters from './Filters';
 import { GetUserAccounts, GetAccountTransactions } from 'Shared/Libraries/user';
 import { getTransactionDataPacket } from 'Shared/Libraries/transactions';
 import { GetFilteredTransactions } from './selectors';
-
-const {
-  libraries: {
-    React,
-    emotion: { styled },
-  },
-  components: { Tooltip },
-} = NEXUS;
 
 const columns = (locale, unixTime) => [
   {
@@ -120,7 +115,8 @@ const mapDispatchToProps = {
   GetAccountTransactions,
   getTransactionDataPacket,
 };
-class Overview extends React.Component {
+
+class Overview extends Component {
   componentDidMount() {
     const { childRef } = this.props;
     childRef(this);
