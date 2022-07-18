@@ -1,19 +1,13 @@
+import { useSelector, useDispatch } from 'react-redux';
+import styled from '@emotion/styled';
+import { Select, TextField, FormField } from 'nexus-module';
+
 import {
   setFromQuery,
   setToQuery,
   setTimeSpan,
   setOperation,
 } from 'Shared/Libraries/ui';
-
-import { connect } from 'react-redux';
-
-const {
-  libraries: {
-    React,
-    emotion: { styled },
-  },
-  components: { Select, TextField, FormField },
-} = NEXUS;
 
 const __ = (input) => input;
 
@@ -62,72 +56,44 @@ const FiltersWrapper = styled.div(({ morePadding }) => ({
   padding: `0 0 10px 0`,
 }));
 
-const MoreOptions = styled.div({
-  paddingLeft: '1em',
-  display: 'grid',
-  gridTemplateColumns: 'auto auto auto auto',
-  gridRowStart: 2,
-  gridColumnStart: 1,
-  gridColumnEnd: 4,
-  columnGap: '.75em',
-  alignItems: 'end',
-});
-
-const Filters = ({
-  operation,
-  fromQuery,
-  toQuery,
-  timeSpan,
-  morePadding,
-  children,
-  optionsOpen,
-  setFromQuery,
-  setToQuery,
-  setTimeSpan,
-  setOperation,
-  ...rest
-}) => (
-  <FiltersWrapper>
-    <FormField connectLabel label={__('From')}>
-      <TextField
-        type="search"
-        placeholder="From Search"
-        value={fromQuery}
-        onChange={(evt) => setFromQuery(evt.target.value)}
-      />
-    </FormField>
-    <FormField connectLabel label={__('To')}>
-      <TextField
-        type="search"
-        placeholder="To Search"
-        value={toQuery}
-        onChange={(evt) => setToQuery(evt.target.value)}
-      />
-    </FormField>
-    <FormField label={__('Time span')}>
-      <Select value={timeSpan} onChange={setTimeSpan} options={timeFrames} />
-    </FormField>
-    <FormField label={__('Operation')}>
-      <Select value={operation} onChange={setOperation} options={opOptions} />
-    </FormField>
-    {children}
-  </FiltersWrapper>
-);
-
-const mapStateToProps = ({
-  ui: {
-    main: { operation, fromQuery, toQuery, timeSpan },
-  },
-}) => ({
-  operation,
-  fromQuery,
-  toQuery,
-  timeSpan,
-});
-
-export default connect(mapStateToProps, {
-  setFromQuery,
-  setToQuery,
-  setTimeSpan,
-  setOperation,
-})(Filters);
+export default function Filters({ children }) {
+  const { operation, fromQuery, toQuery, timeSpan } = useSelector(
+    (state) => state.ui.main
+  );
+  const dispatch = useDispatch();
+  return (
+    <FiltersWrapper>
+      <FormField connectLabel label={__('From')}>
+        <TextField
+          type="search"
+          placeholder="From Search"
+          value={fromQuery}
+          onChange={(evt) => dispatch(setFromQuery(evt.target.value))}
+        />
+      </FormField>
+      <FormField connectLabel label={__('To')}>
+        <TextField
+          type="search"
+          placeholder="To Search"
+          value={toQuery}
+          onChange={(evt) => dispatch(setToQuery(evt.target.value))}
+        />
+      </FormField>
+      <FormField label={__('Time span')}>
+        <Select
+          value={timeSpan}
+          onChange={(value) => dispatch(setTimeSpan(value))}
+          options={timeFrames}
+        />
+      </FormField>
+      <FormField label={__('Operation')}>
+        <Select
+          value={operation}
+          onChange={(value) => dispatch(setOperation(value))}
+          options={opOptions}
+        />
+      </FormField>
+      {children}
+    </FiltersWrapper>
+  );
+}
