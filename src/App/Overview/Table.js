@@ -1,13 +1,7 @@
+import { useState, Fragment } from 'react';
+import styled from '@emotion/styled';
+import { Button, Select } from 'nexus-module';
 import { useTable, useSortBy, usePagination } from 'react-table';
-
-const {
-  libraries: {
-    React,
-    React: { useState, Fragment },
-    emotion: { styled },
-  },
-  components: { Button, Select },
-} = NEXUS;
 
 const TD = styled.td(({ theme, index }) => ({
   padding: '0 0 0 0',
@@ -42,7 +36,13 @@ const PageSelection = styled.div(({ theme }) => ({
   marginRight: 'auto',
 }));
 
-function Table({ columns, data, defaultSortingColumnId, pageSize, ...rest }) {
+export default function Table({
+  columns,
+  data,
+  defaultSortingColumnId,
+  pageSize,
+  ...rest
+}) {
   const defaultSort = [{ id: defaultSortingColumnId, desc: true }];
   const {
     getTableProps,
@@ -161,5 +161,3 @@ function Table({ columns, data, defaultSortingColumnId, pageSize, ...rest }) {
     </Fragment>
   );
 }
-
-export default Table;
