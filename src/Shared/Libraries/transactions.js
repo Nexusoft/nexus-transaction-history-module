@@ -13,7 +13,7 @@ export const getTransactionDataPacket =
         getState,
         async (tx, {}, {}) => {
           const txID = tx.txid;
-          const past = getState().history.transactions[txID];
+          const past = getState().ui.history.transactions[txID];
           if (past) {
             return;
           }
@@ -83,7 +83,8 @@ async function getHistoricInfo(timestamp, fiat, dispatch, getState) {
       unitPrice: result.data.NXS.USD,
     };
     const prev =
-      getState().history.timestamps && getState().history.timestamps[timestamp];
+      getState().ui.history.timestamps &&
+      getState().ui.history.timestamps[timestamp];
     if (prev) {
       dataPacket[timestamp] = prev;
       return dataPacket;

@@ -26,16 +26,6 @@ export const GetAccountTransactions = (accounts, limit) => async (dispatch) => {
     if (accounts) {
       await asyncForEach(accounts, async (account) => {
         if (account.token === '0') {
-          /*
-          console.log(account);
-          const result = await apiCall('users/list/transactions', {
-            verbose: 'summary',
-            address: account.address,
-            where: `results.contracts.address=${account.address}`,
-            limit: limit || 100,
-          });
-          console.log(result);
-          */
           const result = await apiCall('finance/transactions/all', {
             address: account.address,
             limit: limit || 100,
@@ -55,22 +45,6 @@ export const GetAccountTransactions = (accounts, limit) => async (dispatch) => {
       try {
         legacyAddressTransactions = await getLegacyTransactions(transactions);
       } catch (error) {}
-      const legacyTransactions = await apiCall('users/list/transactions', {
-        verbose: 'summary',
-        where: `results.contracts.OP=LEGACY`,
-        limit: limit || 100,
-      });
-      if (legacyTransactions) {
-        legacyTransactions.forEach((element) => {
-          const temp2 = element.contracts
-            .map((e) => {
-              return { ...e, txid: element.txid };
-            })
-            .filter((e) => e.OP != 'CREATE');
-
-          transactions = transactions.concat(temp2);
-        });
-      }
       dispatch({
         type: TYPE.SET_ACCOUNT_TRANSACTIONS,
         payload: transactions.concat(legacyAddressTransactions),

@@ -91,9 +91,10 @@ const mapStateToProps = (state) => {
   const { operation, fromQuery, toQuery, timeSpan } = state.ui.main;
   const { unixTime, transactionsPerPage, locale, nexusApiLimit } =
     state.settings;
-  const { transactions, info, accounts } = state.ui.user;
+  const { transactions, accounts } = state.ui.user;
   const { history } = state.ui;
-  const txTotal = info && state.ui.user.info.transactions;
+  const info = state.nexus.userStatus;
+  const txTotal = info && transactions.length;
   return {
     accounts,
     userInfo: info,
