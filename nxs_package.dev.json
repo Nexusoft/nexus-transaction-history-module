@@ -1,5 +1,5 @@
 {
-  "name": "_dev_nexus_interface_history_module",
+  "name": "_dev_nexus-transaction-history",
   "displayName": "Nexus Transaction History Module",
   "description": "Loads and Saves history data for your Nexus Account",
   "type": "app",
