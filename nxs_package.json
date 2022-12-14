@@ -1,5 +1,5 @@
 {
-  "name": "nexus-transaction-history",
+  "name": "nexus_interface_history_module",
   "displayName": "Transaction History Module",
   "version": "2.0.0",
   "targetWalletVersion": "3.1.0",
