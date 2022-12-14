@@ -4,5 +4,5 @@
   "description": "Loads and Saves history data for your Nexus Account",
   "type": "app",
   "entry": "http://localhost:24011/dev.html",
-  "icon": "dist/logo.svg"
+  "icon": "dist/icon.svg"
 }
