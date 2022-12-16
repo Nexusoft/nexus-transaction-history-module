@@ -30,7 +30,11 @@ export const GetAccountTransactions = (accounts, limit) => async (dispatch) => {
     if (accounts) {
       await asyncForEach(accounts, async (account) => {
         if (account.token === '0') {
-          const result = await apiCall('finance/transactions/account', {
+          const endpoint =
+            account.stake === undefined
+              ? 'finance/transactions/account'
+              : 'finance/transactions/trust';
+          const result = await apiCall(endpoint, {
             address: account.address,
             limit: limit || 100,
           });
