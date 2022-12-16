@@ -94,7 +94,7 @@ const mapStateToProps = (state) => {
   const { transactions, accounts } = state.ui.user;
   const { history } = state.ui;
   const info = state.nexus.userStatus;
-  const txTotal = info && transactions.length;
+  const txTotal = (info && transactions?.length) || 0;
   return {
     accounts,
     userInfo: info,
