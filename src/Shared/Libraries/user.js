@@ -5,10 +5,14 @@ const {
 
 export const GetUserAccounts = () => async (dispatch) => {
   try {
-    const result = await apiCall('finance/list/account', {
-      where: 'results.token=0',
-    });
-    dispatch({ type: TYPE.SET_USER_ACCOUNTS, payload: result });
+    const [trust, accounts] = await Promise.all([
+      apiCall('finance/list/trust'),
+      apiCall('finance/list/account', {
+        where: 'results.token=0',
+      }),
+    ]);
+    const allAccounts = trust.concat(accounts);
+    dispatch({ type: TYPE.SET_USER_ACCOUNTS, payload: allAccounts });
   } catch (error) {
     console.error(error);
   }
