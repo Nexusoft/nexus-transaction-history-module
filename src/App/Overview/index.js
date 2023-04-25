@@ -173,10 +173,10 @@ class Overview extends Component {
         ? {
             ...e,
             to:
-              e.to ||
+              e.to?.address ||
               (e.OP === 'FEE' && 'Fee Reserve') ||
               (e.OP === 'TRUST' && 'Trust Reward'),
-            from: e.from || (e.OP === 'TRUST' && 'Trust Mint'),
+            from: e.from?.address || (e.OP === 'TRUST' && 'Trust Mint'),
             timestamp: history.transactions[e.txid].timestamp,
             fiatAmount: history.transactions[e.txid].fiat.totalValue,
           }

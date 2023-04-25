@@ -18,19 +18,15 @@ export const GetFilteredTransactions = memoize(
     transactions.filter((element) => {
       if (fromQuery) {
         if (
-          element.from &&
-          !element.from.toLowerCase().includes(fromQuery.toLowerCase())
+          !element.from?.address
+            ?.toLowerCase()
+            .includes(fromQuery.toLowerCase())
         )
           return false;
-        if (!element.from) return false;
       }
       if (toQuery) {
-        if (
-          element.to &&
-          !element.to.toLowerCase().includes(toQuery.toLowerCase())
-        )
+        if (!element.to?.toLowerCase().includes(toQuery.toLowerCase()))
           return false;
-        if (!element.to) return false;
       }
       if (operation && element.OP && element.OP !== operation) return false;
       if (timeSpan) {
