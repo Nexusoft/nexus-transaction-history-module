@@ -1,5 +1,5 @@
 // External
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useImperativeHandle } from 'react';
 import Table from './Table';
 import { CSVLink } from 'react-csv';
 import { connect } from 'react-redux';
@@ -117,24 +117,18 @@ const mapDispatchToProps = {
   getTransactionDataPacket,
 };
 
-const Overview = (props) => {
+const Overview = (props, ref) => {
   const csvLinkRef = useRef(null);
 
-  // Regarding childRef: If childRef was intended to expose component instance methods
-  // to a parent, this pattern needs rethinking with functional components.
-  // Common alternatives include forwardRef with useImperativeHandle, or lifting state up.
-  // For now, I'll comment out the childRef logic. If it's critical, we'll need to discuss
-  // its purpose and find a suitable hooks-based solution.
-  /*
-  useEffect(() => {
-    const { childRef } = props;
-    if (childRef) {
-      // This part needs to be adapted based on what childRef expects.
-      // If it expects the instance, useImperativeHandle might be needed.
-      // childRef(???); 
-    }
-  }, [props.childRef]);
-  */
+  useImperativeHandle(
+    ref,
+    () => ({
+      getCsvFileLink: () => {
+        return csvLinkRef.current?.link;
+      },
+    }),
+    []
+  ); // Empty dependency array means the handle is created once
 
   const memoizedGetTransactionHistory = useCallback(() => {
     if (props.transactions) {
@@ -197,10 +191,6 @@ const Overview = (props) => {
     props.nexusApiLimit,
   ]);
 
-  // The large useEffect that was here previously is now replaced by the more specific ones above.
-  // Original start of the large useEffect was here:
-  // useEffect(() => {
-
   const transformTransactionData = useCallback(() => {
     const { transactions, history } = props;
     if (!transactions) return [];
@@ -262,4 +252,6 @@ const Overview = (props) => {
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Overview);
+export default connect(mapStateToProps, mapDispatchToProps, null, {
+  forwardRef: true,
+})(Overview);

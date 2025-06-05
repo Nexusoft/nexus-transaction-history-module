@@ -54,7 +54,7 @@ export default function Main() {
       ) : (
         <a
           download={'NEXUS_HISTORY_DATA.csv'}
-          href={childRef.current?.refs.csvLink.link}
+          href={childRef.current?.getCsvFileLink()}
         >
           Download CSV
         </a>
@@ -84,13 +84,13 @@ export default function Main() {
             columnGap: '1em',
           }}
         >
-          {refreshButton(isLoggedIn && childRef.current?.refs)}
+          {refreshButton(isLoggedIn && childRef.current)}
           {settingButton()}
         </div>
       }
     >
       {isLoggedIn ? (
-        <Overview childRef={(ref) => (childRef.current = ref)} />
+        <Overview ref={childRef} />
       ) : (
         <div>Please Log In!</div>
       )}
