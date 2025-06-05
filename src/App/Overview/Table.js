@@ -86,11 +86,13 @@ export default function Table({
     <Fragment>
       <table {...getTableProps()}>
         <THead>
-          {headerGroups.map((headerGroup) => (
-            <TR {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <TH
-                  {...column.getHeaderProps({
+          {headerGroups.map((headerGroup) => {
+            const { key, ...headerGroupProps } =
+              headerGroup.getHeaderGroupProps();
+            return (
+              <TR {...headerGroupProps} key={key}>
+                {headerGroup.headers.map((column) => {
+                  const { key, ...columnProps } = column.getHeaderProps({
                     ...column.getSortByToggleProps(),
                     title: 'Sort',
                     style: {
@@ -98,25 +100,34 @@ export default function Table({
                       width: column.width,
                       maxWidth: column.maxWidth,
                     },
-                  })}
-                >
-                  {column.render('Header')}
-                  <span>
-                    {column.isSorted ? (column.isSortedDesc ? '▼' : '▲') : ''}
-                  </span>
-                </TH>
-              ))}
-            </TR>
-          ))}
+                  });
+                  return (
+                    <TH {...columnProps} key={key}>
+                      {column.render('Header')}
+                      <span>
+                        {column.isSorted
+                          ? column.isSortedDesc
+                            ? '▼'
+                            : '▲'
+                          : ''}
+                      </span>
+                    </TH>
+                  );
+                })}
+              </TR>
+            );
+          })}
         </THead>
         <TBody {...getTableBodyProps()}>
           {page.map((row, index) => {
             prepareRow(row);
+            const { key, ...rowProps } = row.getRowProps();
             return (
-              <TR {...row.getRowProps()}>
+              <TR {...rowProps} key={key}>
                 {row.cells.map((cell) => {
+                  const { key, ...cellProps } = cell.getCellProps();
                   return (
-                    <TD {...cell.getCellProps()} {...{ index }}>
+                    <TD {...cellProps} key={key} {...{ index }}>
                       {cell.render('Cell')}
                     </TD>
                   );

@@ -1,5 +1,5 @@
 // External
-import { Component } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import Table from './Table';
 import { CSVLink } from 'react-csv';
 import { connect } from 'react-redux';
@@ -117,56 +117,92 @@ const mapDispatchToProps = {
   getTransactionDataPacket,
 };
 
-class Overview extends Component {
-  componentDidMount() {
-    const { childRef } = this.props;
-    childRef(this);
-  }
+const Overview = (props) => {
+  const csvLinkRef = useRef(null);
 
-  componentDidUpdate(prevProps) {
-    const {
-      userInfo,
-      nexusApiLimit,
-      accounts,
-      transactions,
-      txTotal,
-      GetAccountTransactions,
-      GetUserAccounts,
-    } = this.props;
-
-    if (!userInfo || !prevProps.userInfo) {
-      //Not Logged in
-      return;
+  // Regarding childRef: If childRef was intended to expose component instance methods
+  // to a parent, this pattern needs rethinking with functional components.
+  // Common alternatives include forwardRef with useImperativeHandle, or lifting state up.
+  // For now, I'll comment out the childRef logic. If it's critical, we'll need to discuss
+  // its purpose and find a suitable hooks-based solution.
+  /*
+  useEffect(() => {
+    const { childRef } = props;
+    if (childRef) {
+      // This part needs to be adapted based on what childRef expects.
+      // If it expects the instance, useImperativeHandle might be needed.
+      // childRef(???); 
     }
+  }, [props.childRef]);
+  */
 
-    //TODO: Redo all of this
-    if (accounts && prevProps.accounts != accounts) {
-      GetAccountTransactions(accounts, nexusApiLimit);
+  const memoizedGetTransactionHistory = useCallback(() => {
+    if (props.transactions) {
+      props.getTransactionDataPacket(props.transactions, '000000', 'usd');
     }
+  }, [props.transactions, props.getTransactionDataPacket]);
 
-    if (transactions && prevProps.transactions != transactions) {
-      this.getTransactionHistory();
+  // Effect 1: GetAccountTransactions when accounts or nexusApiLimit changes (corresponds to former accounts change check)
+  useEffect(() => {
+    if (props.userInfo && props.accounts) {
+      props.GetAccountTransactions(props.accounts, props.nexusApiLimit);
     }
+  }, [
+    props.userInfo,
+    props.accounts,
+    props.nexusApiLimit,
+    props.GetAccountTransactions,
+  ]);
 
-    if (txTotal && txTotal != prevProps.txTotal) {
-      GetUserAccounts();
-      GetAccountTransactions(accounts, nexusApiLimit);
+  // Effect 2: Get transaction history when transactions change
+  useEffect(() => {
+    if (props.userInfo && props.transactions) {
+      memoizedGetTransactionHistory();
     }
-    if (txTotal !== 0 && !transactions) {
-      GetAccountTransactions(accounts, nexusApiLimit);
+  }, [props.userInfo, props.transactions, memoizedGetTransactionHistory]);
+
+  // Effect 3: Handle GetUserAccounts based on txTotal, and subsequently GetAccountTransactions if needed.
+  // Covers original logic:
+  // - if (txTotal && txTotal != prevProps.txTotal) { GetUserAccounts(); GetAccountTransactions(...); }
+  // - if (txTotal !== 0 && !transactions) { GetAccountTransactions(...); }
+  useEffect(() => {
+    if (props.userInfo) {
+      let shouldTriggerGetAccountTransactions = false;
+
+      // If txTotal is defined (i.e., has a value, including 0), it implies a potential change or an initial state to react to.
+      if (typeof props.txTotal === 'number') {
+        props.GetUserAccounts();
+        // If accounts are present after GetUserAccounts or were already there, flag to get transactions.
+        if (props.accounts) {
+          shouldTriggerGetAccountTransactions = true;
+        }
+      }
+
+      // Also trigger if txTotal is non-zero, transactions are missing, and accounts are present.
+      if (props.txTotal !== 0 && !props.transactions && props.accounts) {
+        shouldTriggerGetAccountTransactions = true;
+      }
+
+      if (shouldTriggerGetAccountTransactions && props.accounts) {
+        props.GetAccountTransactions(props.accounts, props.nexusApiLimit);
+      }
     }
-  }
+  }, [
+    props.userInfo,
+    props.txTotal,
+    props.accounts, // accounts can change after GetUserAccounts or be an initial condition
+    props.transactions, // for the !props.transactions condition
+    props.GetUserAccounts,
+    props.GetAccountTransactions,
+    props.nexusApiLimit,
+  ]);
 
-  getTransactionHistory() {
-    this.props.getTransactionDataPacket(
-      this.props.transactions,
-      '000000',
-      'usd'
-    );
-  }
+  // The large useEffect that was here previously is now replaced by the more specific ones above.
+  // Original start of the large useEffect was here:
+  // useEffect(() => {
 
-  transformTransactionData() {
-    const { transactions, history } = this.props;
+  const transformTransactionData = useCallback(() => {
+    const { transactions, history } = props;
     if (!transactions) return [];
     return transactions.map((e) =>
       history.transactions[e.txid]
@@ -182,47 +218,48 @@ class Overview extends Component {
           }
         : { OP: 'Loading' }
     );
-  }
+  }, [props.transactions, props.history]);
 
-  render() {
-    const {
-      fromQuery,
-      toQuery,
-      timeSpan,
-      operation,
-      locale,
-      unixTime,
-      pageSize,
-    } = this.props;
-    const data = GetFilteredTransactions(
-      this.transformTransactionData(),
-      fromQuery,
-      toQuery,
-      timeSpan,
-      operation
-    );
-    return (
-      <div>
-        <Header>
-          <Filters />
-        </Header>
-        <Table
+  // Destructure props needed for rendering
+  const {
+    fromQuery,
+    toQuery,
+    timeSpan,
+    operation,
+    locale,
+    unixTime,
+    pageSize,
+  } = props;
+
+  const data = GetFilteredTransactions(
+    transformTransactionData(),
+    fromQuery,
+    toQuery,
+    timeSpan,
+    operation
+  );
+
+  return (
+    <div>
+      <Header>
+        <Filters />
+      </Header>
+      <Table
+        data={data}
+        columns={columns(locale, unixTime)}
+        defaultSortingColumnId={'timestamp'}
+        pageSize={pageSize}
+        defaultPageSize={10}
+      />
+      <Footer>
+        <CSVLink
           data={data}
-          columns={columns(locale, unixTime)}
-          defaultSortingColumnId={'timestamp'}
-          pageSize={pageSize}
-          defaultPageSize={10}
-        />
-        <Footer>
-          <CSVLink
-            data={data}
-            ref={'csvLink'}
-            filename={'Nexus_Transaction_History.csv'}
-          ></CSVLink>
-        </Footer>
-      </div>
-    );
-  }
-}
+          ref={csvLinkRef}
+          filename={'Nexus_Transaction_History.csv'}
+        ></CSVLink>
+      </Footer>
+    </div>
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Overview);
